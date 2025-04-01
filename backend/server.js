@@ -1,146 +1,71 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const dotenv = require('dotenv');
-const rateLimit = require('express-rate-limit');
-const path = require('path');
-const LoggerService = require('./services/logger.service');
-const apiLoggerMiddleware = require('./middleware/api-logger.middleware');
-
-// Load environment variables
-dotenv.config();
-
-// Initialize Express app
 const app = express();
+require('dotenv').config();
 
-// Security middleware
-app.use(helmet());
+// Importar configurações do banco de dados
+const { testPostgresConnection } = require('./config/database');
+const { syncModels } = require('./pg-models');
+
+// Middleware
 app.use(cors());
-
-// Rate limiting to prevent abuse
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes by default
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: {
-    status: 429,
-    message: 'Too many requests, please try again later.'
-  }
-});
-app.use('/api', limiter);
-
-// Logging middleware
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-} else {
-  app.use(morgan('combined'));
-}
-
-// Body parsing middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// API Logger middleware - registra todas as chamadas de API
-app.use('/api/ft', apiLoggerMiddleware());
-
-// API routes
-const authRoutes = require('./routes/auth.routes');
-const userRoutes = require('./routes/user.routes.js');
-const accountRoutes = require('./routes/account.routes');
-const transactionRoutes = require('./routes/transaction.routes');
-const reservationRoutes = require('./routes/reservation.routes');
-const ftApiRoutes = require('./routes/ftApi.routes');
-const adminRoutes = require('./routes/admin.routes');
-const securityRoutes = require('./routes/security.routes');
-
-// Apply routes
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/accounts', accountRoutes);
-app.use('/api/transactions', transactionRoutes);
-app.use('/api/reservations', reservationRoutes);
-app.use('/api/ft', ftApiRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/security', securityRoutes);
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  
-  // Registrar erro no serviço de log
-  LoggerService.logSystemError(`Error: ${err.message}`, {
-    path: req.path,
-    method: req.method,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
-
-  res.status(500).json({
-    status: 'error',
-    message: 'Erro interno do servidor'
-  });
-});
-
-// Start server
-const PORT = process.env.PORT || 5000;
-
-// Configuração para tentar conectar ao MongoDB primeiro, mas continuar funcionando se falhar
-const startServer = async () => {
-  // Verificar se o modo offline está ativado
-  if (process.env.MONGODB_OFFLINE_MODE === 'true') {
-    console.log('Modo offline ativado nas configurações. Iniciando servidor sem MongoDB...');
-    app.listen(PORT, () => {
-      console.log(`Servidor rodando na porta ${PORT} em modo offline (sem MongoDB)`);
-      console.log('Utilizando API FT em produção para dados em tempo real');
-    });
-    return;
-  }
-
+// Inicializar conexão com o banco de dados PostgreSQL
+const initDatabase = async () => {
   try {
-    // Tentar conectar ao MongoDB
-    console.log('Tentando conectar ao MongoDB...');
-    console.log(`MongoDB URI: ${process.env.MONGODB_URI || 'mongodb://localhost:27017/newcash-bank'}`);
+    // Testar conexão com PostgreSQL
+    await testPostgresConnection();
     
-    // Tentar conexão com timeout mais curto
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/newcash-bank', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 3000 // Timeout mais curto (3 segundos)
-    }).catch(error => {
-      console.log(`Erro na conexão do MongoDB: ${error.message}`);
-      throw error; // Repassar o erro para o catch de fora
-    });
+    // Sincronizar modelos do PostgreSQL (force: false para não recriar tabelas)
+    await syncModels(false);
     
-    console.log('MongoDB conectado com sucesso');
-    
-    // Iniciar servidor após conectar ao MongoDB
-    app.listen(PORT, () => {
-      console.log(`Servidor rodando na porta ${PORT} com MongoDB`);
-    });
+    console.log('Conexão com banco de dados PostgreSQL inicializada com sucesso');
   } catch (error) {
-    // Se falhar a conexão com MongoDB, iniciar em modo offline
-    console.log(`MongoDB connection error: ${error.message}`);
-    console.log('Iniciando servidor em modo offline (sem MongoDB)...');
-    
-    // Iniciar o servidor sem esperar pelo MongoDB
-    app.listen(PORT, () => {
-      console.log(`Servidor rodando na porta ${PORT} em modo offline (sem MongoDB)`);
-      console.log('Utilizando API FT em produção para dados em tempo real');
-    });
+    console.error('Erro ao inicializar banco de dados PostgreSQL:', error);
   }
 };
 
-// Iniciar o servidor com tratamento de exceções global
-try {
-  console.log('Iniciando aplicação NewCash Bank System...');
-  startServer();
-} catch (err) {
-  console.error('Erro fatal ao iniciar o servidor:', err);
-}
+// Inicializar banco de dados
+initDatabase();
 
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err) => {
-  console.error('Unhandled Promise Rejection:', err);
+// Importar rotas
+const adminRoutes = require('./routes/admin.routes');
+const ftAccountsRoutes = require('./routes/ft-accounts.routes');
+const userPreferencesRoutes = require('./routes/user-preferences.routes');
+const authRoutes = require('./routes/auth.routes');
+const accountRoutes = require('./routes/account.routes');
+const transactionRoutes = require('./routes/transaction.routes');
+
+// Rota de saúde
+app.get('/api/health', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        time: new Date(),
+        database: 'postgresql'
+    });
 });
 
-module.exports = app; // For testing purposes
+// Registrar rotas
+app.use('/api/admin', adminRoutes);
+app.use('/api/ft-accounts', ftAccountsRoutes);
+app.use('/api/user', userPreferencesRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/accounts', accountRoutes);
+app.use('/api/transactions', transactionRoutes);
+
+// Dados simulados para teste (até que os dados reais sejam migrados)
+app.get('/api/account/balance', (req, res) => {
+    res.json({
+        usd_account: '60428',
+        eur_account: '60429',
+        usd_balance: 1000000.00,
+        eur_balance: 850000.00
+    });
+});
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT} - Ambiente: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`Sistema PostgreSQL ativo`);
+});

@@ -37,7 +37,7 @@ const Login = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated && user) {
-      navigate(user.role === 'admin' ? '/admin/dashboard' : '/client/dashboard');
+      navigate(user.role === 'admin' ? '/admin/dashboard' : '/dashboard');
     } else if (requireTwoFactor) {
       navigate('/two-factor');
     }

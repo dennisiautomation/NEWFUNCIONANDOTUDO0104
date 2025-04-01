@@ -76,7 +76,7 @@ const SystemSettings = () => {
       notifyOnLimitChange: true
     },
     api: {
-      baseUrl: 'http://mytest.ftassetmanagement.com/api',
+      baseUrl: 'https://mytest.ftassetmanagement.com/api',
       apiKey: '6d9bac1b-f685-11ef-a3af-00155d010b18',
       timeout: 30000,
       retryAttempts: 3
@@ -433,6 +433,7 @@ const SystemSettings = () => {
                   label="URL Base da API"
                   value={formData.api.baseUrl}
                   onChange={(e) => handleChange('api', 'baseUrl', e.target.value)}
+                  helperText="Ex: https://mytest.ftassetmanagement.com/api"
                 />
               </Grid>
               

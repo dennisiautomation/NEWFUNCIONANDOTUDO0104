@@ -50,4 +50,39 @@ router.get('/', userController.getUsers);
 router.get('/profile', userController.getProfile);
 router.put('/profile', userController.updateProfile);
 
+// Adicionar rota para buscar usuário por email
+router.get('/by-email/:email', async (req, res) => {
+  try {
+    const email = req.params.email;
+    
+    // Importar o modelo User diretamente do sistema
+    const { User } = require('../pg-models');
+    
+    // Buscar usuário pelo email
+    const user = await User.findOne({ 
+      where: { email },
+      attributes: { exclude: ['password', 'passwordResetToken', 'passwordResetExpires', 'twoFactorSecret'] }
+    });
+    
+    if (!user) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Usuário não encontrado'
+      });
+    }
+    
+    return res.status(200).json({
+      status: 'success',
+      data: user
+    });
+  } catch (error) {
+    console.error('Erro ao buscar usuário por email:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Erro interno do servidor',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
 module.exports = router;

@@ -16,18 +16,27 @@ class LoggerService {
 
   /**
    * Registra uma atividade de usuário
-   * @param {String} action - Tipo de ação realizada
-   * @param {String} userId - ID do usuário
-   * @param {Object} details - Detalhes adicionais da ação
-   * @param {Object} req - Objeto de requisição Express (opcional)
+   * @param {Object} params - Parâmetros da atividade
+   * @param {String} params.userId - ID do usuário
+   * @param {String} params.action - Tipo de ação realizada
+   * @param {Object} params.details - Detalhes adicionais da ação
    */
-  static async logUserActivity(action, userId, details = {}, req = null) {
+  static async logUserActivity(params) {
     try {
+      const { userId, action, details = {} } = params;
+      
       if (!this.isDbConnected) {
         console.log(`[LOG] User Activity: ${action} | User: ${userId}`);
         return;
       }
-      await ActivityLog.logUserActivity(action, userId, details, req);
+      
+      // Se ainda estamos usando o modelo antigo do MongoDB
+      if (typeof ActivityLog.logUserActivity === 'function') {
+        await ActivityLog.logUserActivity(action, userId, details);
+      } else {
+        // Compatibilidade para caso o modelo antigo não exista ou tenha mudado
+        console.log(`[LOG] User Activity: ${action} | User: ${userId} | Details:`, details);
+      }
     } catch (error) {
       console.error('Erro ao registrar atividade de usuário:', error);
     }
@@ -53,21 +62,96 @@ class LoggerService {
   }
 
   /**
-   * Registra uma atividade relacionada a uma transação
+   * Registra uma atividade de segurança
    * @param {String} action - Tipo de ação realizada
-   * @param {String} transactionId - ID da transação
-   * @param {String} userId - ID do usuário (opcional)
+   * @param {String} userId - ID do usuário (se aplicável)
    * @param {Object} details - Detalhes adicionais da ação
+   * @param {String} ip - Endereço IP (opcional)
    */
-  static async logTransactionActivity(action, transactionId, userId = null, details = {}) {
+  static async logSecurityActivity(action, userId = null, details = {}, ip = null) {
     try {
       if (!this.isDbConnected) {
-        console.log(`[LOG] Transaction Activity: ${action} | Transaction: ${transactionId}`);
+        console.log(`[LOG] Security Activity: ${action} | User: ${userId || 'N/A'}`);
         return;
       }
-      await ActivityLog.logTransactionActivity(action, transactionId, userId, details);
+      await ActivityLog.logSecurityActivity(action, userId, details, ip);
     } catch (error) {
-      console.error('Erro ao registrar atividade de transação:', error);
+      console.error('Erro ao registrar atividade de segurança:', error);
+    }
+  }
+
+  /**
+   * Registra uma atividade do sistema
+   * @param {String} action - Tipo de ação realizada
+   * @param {Object} details - Detalhes adicionais da ação
+   */
+  static async logSystemActivity(action, details = {}) {
+    try {
+      if (!this.isDbConnected) {
+        console.log(`[LOG] System Activity: ${action}`);
+        return;
+      }
+      await ActivityLog.logSystemActivity(action, details);
+    } catch (error) {
+      console.error('Erro ao registrar atividade do sistema:', error);
+    }
+  }
+
+  /**
+   * Registra uma atividade geral
+   * @param {String} type - Tipo de log (info, warning, error)
+   * @param {String} message - Mensagem principal
+   * @param {Object} data - Dados adicionais
+   */
+  static async log(type, message, data = {}) {
+    try {
+      if (!this.isDbConnected) {
+        console.log(`[${type.toUpperCase()}] ${message}`);
+        return;
+      }
+      await ActivityLog.createLog(type, message, data);
+    } catch (error) {
+      console.error('Erro ao registrar log:', error);
+    }
+  }
+
+  // Atalhos para tipos comuns de logs
+
+  /**
+   * Registra log de informação
+   * @param {String} message - Mensagem de informação
+   * @param {Object} data - Dados adicionais
+   */
+  static async info(message, data = {}) {
+    await this.log('info', message, data);
+  }
+
+  /**
+   * Registra log de aviso
+   * @param {String} message - Mensagem de aviso
+   * @param {Object} data - Dados adicionais
+   */
+  static async warning(message, data = {}) {
+    await this.log('warning', message, data);
+  }
+
+  /**
+   * Registra log de erro
+   * @param {String} message - Mensagem de erro
+   * @param {Object} data - Dados adicionais
+   */
+  static async error(message, data = {}) {
+    await this.log('error', message, data);
+  }
+
+  /**
+   * Registra log de debug (apenas em desenvolvimento)
+   * @param {String} message - Mensagem de debug
+   * @param {Object} data - Dados adicionais
+   */
+  static async debug(message, data = {}) {
+    if (process.env.NODE_ENV === 'development') {
+      await this.log('debug', message, data);
     }
   }
 

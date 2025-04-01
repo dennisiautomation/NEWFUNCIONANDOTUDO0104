@@ -9,7 +9,7 @@ export const testApiConnections = createAsyncThunk(
       const apis = [
         {
           name: 'Reservation',
-          url: 'http://mytest.ftassetmanagement.com/api/Reservation.asp',
+          url: 'https://mytest.ftassetmanagement.com/api/Reservation.asp',
           params: {
             key: '6d9bac1b-f685-11ef-a3af-00155d010b18',
             account: '42226'
@@ -17,21 +17,21 @@ export const testApiConnections = createAsyncThunk(
         },
         {
           name: 'Reservation_confirmation',
-          url: 'http://mytest.ftassetmanagement.com/api/Reservation_confirmation.asp',
+          url: 'https://mytest.ftassetmanagement.com/api/Reservation_confirmation.asp',
           params: {
             key: '6d9bac1b-f685-11ef-a3af-00155d010b18'
           }
         },
         {
           name: 'Receiving',
-          url: 'http://mytest.ftassetmanagement.com/api/receiving.asp',
+          url: 'https://mytest.ftassetmanagement.com/api/receiving.asp',
           params: {
             key: '6d9bac1b-f685-11ef-a3af-00155d010b18'
           }
         },
         {
           name: 'Send',
-          url: 'http://mytest.ftassetmanagement.com/api/send.asp',
+          url: 'https://mytest.ftassetmanagement.com/api/send.asp',
           params: {
             key: '6d9bac1b-f685-11ef-a3af-00155d010b18'
           }

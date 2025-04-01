@@ -1,5 +1,6 @@
 const LoggerService = require('../services/logger.service');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 /**
  * Middleware para registrar atividades de usuários
@@ -26,38 +27,38 @@ const userActivityMiddleware = (action) => {
         } else {
           try {
             // Decodifica o token para obter o ID do usuário
-            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'newcash-bank-system-secret');
+            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'newcashbank-migration-secret-2025');
             userId = decoded.id;
           } catch (jwtError) {
-            console.warn('Erro ao decodificar token JWT:', jwtError.message);
-            // Continua com userId = 'unknown'
+            console.error('Erro ao decodificar token para atividade:', jwtError.message);
           }
         }
         
-        // Prepara os detalhes da atividade
-        const details = {
-          method: req.method,
-          path: req.originalUrl || req.url,
-          ip: req.ip,
-          userAgent: req.get('User-Agent'),
-          params: req.params,
-          query: req.query,
-          // Não incluímos o body completo para evitar dados sensíveis
-          // Apenas incluímos campos específicos se necessário
-          bodyFields: Object.keys(req.body || {})
-        };
-        
         // Registra a atividade do usuário
-        await LoggerService.logUserActivity(action, userId, details, req);
+        try {
+          await LoggerService.logUserActivity({
+            userId,
+            action,
+            details: {
+              method: req.method,
+              path: req.originalUrl,
+              params: req.params,
+              query: req.query,
+              body: req.method === 'GET' ? undefined : req.body, // Não logar o body para requisições GET
+              userAgent: req.headers['user-agent'],
+              ip: req.ip || req.connection.remoteAddress
+            }
+          });
+        } catch (logError) {
+          // Não bloquear a requisição se houver erro no log
+          console.error('Erro ao registrar atividade:', logError.message);
+        }
       }
       
-      // Continua com a requisição
       next();
     } catch (error) {
-      // Em caso de erro, apenas registra o erro e continua
-      // Não queremos que falhas no log bloqueiem a aplicação
-      console.error('Erro ao registrar atividade do usuário:', error);
-      next();
+      console.error('Erro no middleware de atividade do usuário:', error);
+      next(); // Continua mesmo com erro para não bloquear a requisição
     }
   };
 };

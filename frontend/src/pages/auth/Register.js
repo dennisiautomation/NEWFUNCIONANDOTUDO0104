@@ -40,6 +40,8 @@ const Register = () => {
     lastName: '',
     email: '',
     phone: '',
+    documentType: 'cpf',
+    documentNumber: '',
     password: '',
     confirmPassword: '',
     agreeTerms: false,
@@ -56,6 +58,8 @@ const Register = () => {
     lastName: '',
     email: '',
     phone: '',
+    documentType: '',
+    documentNumber: '',
     password: '',
     confirmPassword: '',
     agreeTerms: ''
@@ -105,7 +109,9 @@ const Register = () => {
       firstName: '',
       lastName: '',
       email: '',
-      phone: ''
+      phone: '',
+      documentType: '',
+      documentNumber: ''
     };
     
     if (!formData.firstName.trim()) {
@@ -131,6 +137,11 @@ const Register = () => {
       valid = false;
     } else if (!isValidPhone(formData.phone)) {
       newErrors.phone = 'Por favor, insira um número de telefone válido';
+      valid = false;
+    }
+    
+    if (!formData.documentNumber.trim()) {
+      newErrors.documentNumber = 'Número do documento é obrigatório';
       valid = false;
     }
     
@@ -218,33 +229,41 @@ const Register = () => {
   };
   
   // Form submission
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     setSubmitting(true);
     
-    // Validar campos
-    let errors = {};
+    // Prepare data for submission
+    const userData = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      documentType: formData.documentType,
+      documentNumber: formData.documentNumber,
+      password: formData.password,
+      role: 'client'
+    };
     
-    if (!formData.firstName) errors.firstName = 'Nome é obrigatório';
-    if (!formData.lastName) errors.lastName = 'Sobrenome é obrigatório';
-    if (!formData.email) errors.email = 'Email é obrigatório';
-    else if (!isValidEmail(formData.email)) errors.email = 'Por favor, insira um endereço de email válido';
-    if (!formData.password) errors.password = 'Senha é obrigatória';
-    else if (!isValidPassword(formData.password)) errors.password = 'A senha deve ter pelo menos 8 caracteres e incluir pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial';
-    if (!formData.confirmPassword) errors.confirmPassword = 'Por favor, confirme sua senha';
-    else if (formData.password !== formData.confirmPassword) errors.confirmPassword = 'As senhas não coincidem';
+    console.log("Enviando dados de registro:", userData);
     
-    setFormErrors(errors);
-    
-    if (Object.keys(errors).length === 0) {
-      // Simular registro bem-sucedido
-      setTimeout(() => {
-        alert(`Conta criada com sucesso! Você receberá um email em ${formData.email} para confirmar seu registro.`);
-        navigate('/login');
-      }, 1500);
-    } else {
-      setSubmitting(false);
-    }
+    // Dispatch registration action
+    dispatch(register(userData))
+      .unwrap()
+      .then((response) => {
+        // Registration successful
+        console.log('Registro bem-sucedido:', response);
+        alert('Conta criada com sucesso! Você será redirecionado para a página de login.');
+        setTimeout(() => {
+          navigate('/login');
+        }, 1500);
+      })
+      .catch((err) => {
+        console.error('Erro no registro:', err);
+        alert(`Erro ao criar conta: ${err.message || 'Erro desconhecido'}`);
+      })
+      .finally(() => {
+        setSubmitting(false);
+      });
   };
   
   // Render step content
@@ -306,49 +325,87 @@ const Register = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
+            </Grid>
+            
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              autoComplete="email"
+              value={formData.email}
+              onChange={handleChange}
+              error={!!formErrors.email}
+              helperText={formErrors.email}
+              disabled={loading}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EmailOutlined />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="phone"
+              label="Telefone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              error={!!formErrors.phone}
+              helperText={formErrors.phone}
+              disabled={loading}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PhoneOutlined />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            
+            {/* Novos campos para documento */}
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4}>
                 <TextField
+                  select
                   margin="normal"
                   required
                   fullWidth
-                  id="email"
-                  label="Endereço de Email"
-                  name="email"
-                  autoComplete="email"
-                  value={formData.email}
+                  id="documentType"
+                  label="Tipo de Documento"
+                  name="documentType"
+                  value={formData.documentType}
                   onChange={handleChange}
-                  error={!!formErrors.email}
-                  helperText={formErrors.email}
+                  error={!!formErrors.documentType}
+                  helperText={formErrors.documentType}
                   disabled={loading}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <EmailOutlined />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
+                >
+                  <option value="cpf">CPF</option>
+                  <option value="cnpj">CNPJ</option>
+                  <option value="passport">Passaporte</option>
+                </TextField>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={8}>
                 <TextField
                   margin="normal"
                   required
                   fullWidth
-                  id="phone"
-                  label="Número de Telefone"
-                  name="phone"
-                  value={formData.phone}
+                  id="documentNumber"
+                  label={formData.documentType === 'passport' ? 'Número do Passaporte' : 
+                         formData.documentType === 'cnpj' ? 'CNPJ' : 'CPF'}
+                  name="documentNumber"
+                  value={formData.documentNumber}
                   onChange={handleChange}
-                  error={!!formErrors.phone}
-                  helperText={formErrors.phone}
+                  error={!!formErrors.documentNumber}
+                  helperText={formErrors.documentNumber}
                   disabled={loading}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <PhoneOutlined />
-                      </InputAdornment>
-                    ),
-                  }}
                 />
               </Grid>
             </Grid>

@@ -1,0 +1,33 @@
+(node:18426) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:18426) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+Servidor rodando na porta 3001 - Ambiente: development
+Sistema híbrido: MongoDB (contas FT) + PostgreSQL (contas internas) ativo
+Ambiente de desenvolvimento: Ignorando registro de atividade "register_internal_user"
+Executing (default): SELECT "id", "name", "email", "password", "role", "status", "documentType", "documentNumber", "twoFactorEnabled", "twoFactorSecret", "failedLoginAttempts", "lastLogin", "passwordResetToken", "passwordResetExpires", "createdAt", "updatedAt" FROM "Users" AS "User" WHERE "User"."email" = 'cliente@teste.com';
+Executing (default): INSERT INTO "Users" ("id","name","email","password","role","status","twoFactorEnabled","failedLoginAttempts","createdAt","updatedAt") VALUES (DEFAULT,$1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING "id","name","email","password","role","status","documentType","documentNumber","twoFactorEnabled","twoFactorSecret","failedLoginAttempts","lastLogin","passwordResetToken","passwordResetExpires","createdAt","updatedAt";
+Ambiente de desenvolvimento: Ignorando registro de atividade "login_internal_user"
+Executing (default): SELECT "id", "name", "email", "password", "role", "status", "documentType", "documentNumber", "twoFactorEnabled", "twoFactorSecret", "failedLoginAttempts", "lastLogin", "passwordResetToken", "passwordResetExpires", "createdAt", "updatedAt" FROM "Users" AS "User" WHERE "User"."email" = 'admin@newcash.com';
+Executing (default): UPDATE "Users" SET "lastLogin"=$1,"updatedAt"=$2 WHERE "id" = $3
+Ambiente de desenvolvimento: Ignorando verificação de token
+Ambiente de desenvolvimento: Ignorando registro de atividade "create_internal_account"
+Executing (default): SELECT "id", "name", "email", "password", "role", "status", "documentType", "documentNumber", "twoFactorEnabled", "twoFactorSecret", "failedLoginAttempts", "lastLogin", "passwordResetToken", "passwordResetExpires", "createdAt", "updatedAt" FROM "Users" AS "User" WHERE "User"."id" = 1;
+Erro ao criar conta interna: Error: WHERE parameter "accountType" has invalid "undefined" value
+    at PostgresQueryGenerator.whereItemQuery (/var/www/newcashbank/backend/node_modules/sequelize/lib/dialects/abstract/query-generator.js:1746:13)
+    at /var/www/newcashbank/backend/node_modules/sequelize/lib/dialects/abstract/query-generator.js:1737:25
+    at Array.forEach (<anonymous>)
+    at PostgresQueryGenerator.whereItemsQuery (/var/www/newcashbank/backend/node_modules/sequelize/lib/dialects/abstract/query-generator.js:1735:35)
+    at PostgresQueryGenerator.getWhereConditions (/var/www/newcashbank/backend/node_modules/sequelize/lib/dialects/abstract/query-generator.js:2078:19)
+    at PostgresQueryGenerator.selectQuery (/var/www/newcashbank/backend/node_modules/sequelize/lib/dialects/abstract/query-generator.js:991:28)
+    at PostgresQueryInterface.rawSelect (/var/www/newcashbank/backend/node_modules/sequelize/lib/dialects/abstract/query-interface.js:430:37)
+    at Account.aggregate (/var/www/newcashbank/backend/node_modules/sequelize/lib/model.js:1277:45)
+    at Account.count (/var/www/newcashbank/backend/node_modules/sequelize/lib/model.js:1306:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Ambiente de desenvolvimento: Ignorando verificação de token
+Ambiente de desenvolvimento: Ignorando registro de atividade "list_internal_accounts"
+Executing (default): SELECT "Account"."id", "Account"."accountNumber", "Account"."accountType", "Account"."userId", "Account"."balance", "Account"."status", "Account"."isInternal", "Account"."dailyTransferLimit", "Account"."monthlyTransferLimit", "Account"."dailyTransferTotal", "Account"."monthlyTransferTotal", "Account"."lastDailyReset", "Account"."lastMonthlyReset", "Account"."createdAt", "Account"."updatedAt", "user"."id" AS "user.id", "user"."name" AS "user.name", "user"."email" AS "user.email", "user"."documentType" AS "user.documentType", "user"."documentNumber" AS "user.documentNumber" FROM "Accounts" AS "Account" LEFT OUTER JOIN "Users" AS "user" ON "Account"."userId" = "user"."id" WHERE "Account"."isInternal" = true ORDER BY "Account"."createdAt" DESC;
+Ambiente de desenvolvimento: Ignorando verificação de token
+Ambiente de desenvolvimento: Ignorando registro de atividade "deposit_internal_account"
+Executing (d121c52e-18b5-4cb0-9352-1a3d0e5a4cf3): START TRANSACTION;
+Executing (d121c52e-18b5-4cb0-9352-1a3d0e5a4cf3): ROLLBACK;
+Erro ao conectar ao MongoDB: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017

@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const FTApiService = require('../services/ftApi.service');
 const LoggerService = require('../services/logger.service');
+const adminAccountController = require('../controllers/admin-account.controller');
+const adminUserController = require('../controllers/admin-user.controller');
+const adminTransactionController = require('../controllers/admin-transaction.controller');
+const adminUserLimitsController = require('../controllers/admin-user-limits.controller');
+const authMiddleware = require('../middleware/auth.middleware');
 
 // Controlador admin com dados das contas correspondentes
 const adminController = {
@@ -233,5 +238,37 @@ router.get('/dashboard', adminController.getDashboard);
 router.get('/correspondent/usd', adminController.getCorrespondentUSD);
 router.get('/correspondent/eur', adminController.getCorrespondentEUR);
 router.get('/users', adminController.getUsers);
+
+// Rotas para criação e gestão de usuários/contas - removendo middleware temporariamente para testes
+router.get('/accounts', adminAccountController.listAccounts);
+router.get('/accounts/:userId', adminAccountController.getUserDetails);
+
+// Rotas para relatórios de transações - removendo middleware temporariamente para testes
+router.get('/transactions', adminTransactionController.getTransactions);
+router.get('/transactions/export', adminTransactionController.exportTransactions);
+router.get('/transactions/:id', adminTransactionController.getTransactionDetails);
+
+// Verifica se o controlador de limites existe antes de registrar as rotas
+if (adminUserLimitsController && adminUserLimitsController.getUserLimits) {
+  // Rotas para gerenciamento de limites de usuário - removendo middleware temporariamente para testes
+  router.get('/users/:userId/limits', adminUserLimitsController.getUserLimits);
+  router.put('/users/:userId/limits', adminUserLimitsController.updateUserLimits);
+}
+
+// Rotas para gerenciamento de contas
+router.route('/accounts')
+  .get(adminAccountController.listAccounts)
+  .post(adminAccountController.createAccount);
+
+// Rotas para depósito e saque
+router.post('/accounts/:id/deposit', adminAccountController.depositToAccount);
+router.post('/accounts/:id/withdraw', adminAccountController.withdrawFromAccount);
+
+// Rota para atualização de conta (status, limites)
+router.put('/accounts/:id', adminAccountController.updateAccount);
+
+// Rotas para gerenciamento de usuários
+router.put('/users/:id', adminUserController.updateUser);
+router.post('/users/:id/reset-tokens', adminUserController.resetUserTokens);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
@@ -20,7 +20,8 @@ import {
   MenuItem, 
   Badge, 
   Tooltip, 
-  useMediaQuery
+  useMediaQuery,
+  Button
 } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -98,10 +99,30 @@ const ClientLayout = ({ children }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { language, toggleLanguage } = useLanguage();
   
+  // Console logs para diagnóstico
+  console.log('ClientLayout renderizando. Path:', location.pathname);
+  
   // Get user data and sidebar state from Redux
   const { user } = useSelector((state) => state.auth);
   const { sidebar } = useSelector((state) => state.ui);
   const { notifications } = useSelector((state) => state.ui);
+  
+  // Log de diagnóstico do estado do usuário
+  console.log('ClientLayout - User:', user ? { id: user.id, email: user.email } : 'não disponível');
+  
+  // Verificação de segurança - se não existir usuário, redireciona para login
+  useEffect(() => {
+    // Dupla verificação de autenticação
+    const token = localStorage.getItem('token');
+    const userExists = !!user;
+    
+    console.log('ClientLayout - Verificação de autenticação:', { tokenExists: !!token, userExists });
+    
+    if (!token || !userExists) {
+      console.log('ClientLayout - Redirecionando para /login por falta de autenticação');
+      navigate('/login');
+    }
+  }, [user, navigate]);
   
   // Local state for profile menu
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -144,7 +165,7 @@ const ClientLayout = ({ children }) => {
   // Navigation items
   const navItems = [
     { text: translate('Dashboard', language), icon: <DashboardIcon />, path: '/dashboard' },
-    { text: translate('My Account', language), icon: <AccountBoxIcon />, path: '/my-account' },
+    { text: translate('My Account', language), icon: <AccountBoxIcon />, path: '/account' },
     { text: translate('Transfer Funds', language), icon: <SendIcon />, path: '/transfers' },
     { text: translate('Transaction History', language), icon: <ListAltIcon />, path: '/transactions' },
     { text: translate('Profile', language), icon: <PersonIcon />, path: '/profile' },
@@ -275,178 +296,219 @@ const ClientLayout = ({ children }) => {
     </>
   );
   
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      
-      {/* App Bar */}
-      <AppBarStyled position="fixed" open={isDrawerOpen} color="default">
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerToggle}
-            edge="start"
-            sx={{ mr: 2, ...(isDrawerOpen && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
-            <Typography variant="h6" noWrap component="div">
-              {navItems.find(item => item.path === location.pathname)?.text || 'Dashboard'}
-            </Typography>
-          </Box>
-          
-          <Box sx={{ flexGrow: 1 }} />
-          
-          {/* Notifications */}
-          <Box sx={{ display: 'flex' }}>
-            <Tooltip title="Notifications">
-              <IconButton
-                size="large"
-                aria-label="show notifications"
-                color="inherit"
-                onClick={handleOpenNotificationsMenu}
-              >
-                <Badge badgeContent={notifications.unread} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-            
-            {/* Language Toggle Button */}
-            <Tooltip title={translate('Change Language', language)}>
-              <IconButton 
-                size="large" 
-                color="inherit" 
-                onClick={toggleLanguage}
-                sx={{ ml: 1 }}
-              >
-                <TranslateIcon />
-              </IconButton>
-            </Tooltip>
-            
-            {/* User menu */}
-            <Tooltip title="Account settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 1 }}>
-                <Avatar sx={{ bgcolor: 'black' }}>
-                  {getUserInitials()}
-                </Avatar>
-              </IconButton>
-            </Tooltip>
-          </Box>
-          
-          {/* Notifications Menu */}
-          <Menu
-            sx={{ mt: '45px' }}
-            id="notifications-menu"
-            anchorEl={anchorElNotifications}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(anchorElNotifications)}
-            onClose={handleCloseNotificationsMenu}
-          >
-            {notifications.items.length > 0 ? (
-              notifications.items.map((notification) => (
-                <MenuItem key={notification.id} onClick={handleCloseNotificationsMenu}>
-                  <Typography textAlign="center">{notification.message}</Typography>
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem onClick={handleCloseNotificationsMenu}>
-                <Typography textAlign="center">No new notifications</Typography>
-              </MenuItem>
-            )}
-          </Menu>
-          
-          {/* User Menu */}
-          <Menu
-            sx={{ mt: '45px' }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
-            <MenuItem onClick={() => { navigate('/client/profile'); handleCloseUserMenu(); }}>
-              <ListItemIcon>
-                <PersonIcon fontSize="small" />
-              </ListItemIcon>
-              <Typography textAlign="center">Profile</Typography>
-            </MenuItem>
-            <MenuItem onClick={() => { handleCloseUserMenu(); }}>
-              <ListItemIcon>
-                <SettingsIcon fontSize="small" />
-              </ListItemIcon>
-              <Typography textAlign="center">Settings</Typography>
-            </MenuItem>
-            <Divider />
-            <MenuItem onClick={() => { handleLogout(); handleCloseUserMenu(); }}>
-              <ListItemIcon>
-                <LogoutIcon fontSize="small" />
-              </ListItemIcon>
-              <Typography textAlign="center">Logout</Typography>
-            </MenuItem>
-          </Menu>
-        </Toolbar>
-      </AppBarStyled>
-      
-      {/* Drawer - Mobile */}
-      {isMobile && (
-        <Drawer
-          variant="temporary"
-          open={sidebar.open}
-          onClose={handleDrawerToggle}
-          ModalProps={{ keepMounted: true }}
+  // Renderizar o layout com tratamento de erros
+  try {
+    console.log('ClientLayout - Renderizando interface do cliente');
+    
+    return (
+      <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+        <CssBaseline />
+        
+        {/* App Bar */}
+        <AppBar
+          position="fixed"
+          color="default"
+          elevation={0}
           sx={{
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            width: { sm: `calc(100% - ${isDrawerOpen ? drawerWidth : 0}px)` },
+            ml: { sm: `${isDrawerOpen ? drawerWidth : 0}px` },
+            borderBottom: '1px solid #e0e0e0',
+            backgroundColor: 'white'
           }}
         >
-          {drawerContent}
-        </Drawer>
-      )}
-      
-      {/* Drawer - Desktop */}
-      {!isMobile && (
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerToggle}
+              edge="start"
+              sx={{ mr: 2, ...(isDrawerOpen && { display: 'none' }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+            
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+              <Typography variant="h6" noWrap component="div">
+                {navItems.find(item => item.path === location.pathname)?.text || 'Dashboard'}
+              </Typography>
+            </Box>
+            
+            <Box sx={{ flexGrow: 1 }} />
+            
+            {/* Notifications */}
+            <Box sx={{ display: 'flex' }}>
+              <Tooltip title="Notifications">
+                <IconButton
+                  size="large"
+                  aria-label="show notifications"
+                  color="inherit"
+                  onClick={handleOpenNotificationsMenu}
+                >
+                  <Badge badgeContent={notifications.unread} color="error">
+                    <NotificationsIcon />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+              
+              {/* Language Toggle Button */}
+              <Tooltip title={translate('Change Language', language)}>
+                <IconButton 
+                  size="large" 
+                  color="inherit" 
+                  onClick={toggleLanguage}
+                  sx={{ ml: 1 }}
+                >
+                  <TranslateIcon />
+                </IconButton>
+              </Tooltip>
+              
+              {/* User menu */}
+              <Tooltip title="Account settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 1 }}>
+                  <Avatar sx={{ bgcolor: 'black' }}>
+                    {getUserInitials()}
+                  </Avatar>
+                </IconButton>
+              </Tooltip>
+            </Box>
+            
+            {/* Notifications Menu */}
+            <Menu
+              sx={{ mt: '45px' }}
+              id="notifications-menu"
+              anchorEl={anchorElNotifications}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElNotifications)}
+              onClose={handleCloseNotificationsMenu}
+            >
+              {notifications.items.length > 0 ? (
+                notifications.items.map((notification) => (
+                  <MenuItem key={notification.id} onClick={handleCloseNotificationsMenu}>
+                    <Typography textAlign="center">{notification.message}</Typography>
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem onClick={handleCloseNotificationsMenu}>
+                  <Typography textAlign="center">No new notifications</Typography>
+                </MenuItem>
+              )}
+            </Menu>
+            
+            {/* User Menu */}
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem onClick={() => { navigate('/client/profile'); handleCloseUserMenu(); }}>
+                <ListItemIcon>
+                  <PersonIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography textAlign="center">Profile</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => { handleCloseUserMenu(); }}>
+                <ListItemIcon>
+                  <SettingsIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography textAlign="center">Settings</Typography>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={() => { handleLogout(); handleCloseUserMenu(); }}>
+                <ListItemIcon>
+                  <LogoutIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
+            </Menu>
+          </Toolbar>
+        </AppBar>
+        
+        {/* Drawer - Menu lateral */}
         <Drawer
-          variant="persistent"
+          variant={isMobile ? 'temporary' : 'persistent'}
           open={isDrawerOpen}
+          onClose={handleDrawerToggle}
           sx={{
             width: drawerWidth,
             flexShrink: 0,
-            '& .MuiDrawer-paper': {
-              width: drawerWidth,
+            [`& .MuiDrawer-paper`]: { 
+              width: drawerWidth, 
               boxSizing: 'border-box',
+              backgroundColor: '#f8f9fa',
+              borderRight: '1px solid #e0e0e0'
             },
           }}
         >
           {drawerContent}
         </Drawer>
-      )}
-      
-      {/* Main Content */}
-      <Main open={isDrawerOpen}>
-        <DrawerHeader />
-        {children}
-      </Main>
-    </Box>
-  );
+        
+        {/* Main content */}
+        <Main open={isDrawerOpen}>
+          <DrawerHeader />
+          <Box sx={{ 
+            padding: theme.spacing(3),
+            backgroundColor: '#f5f5f5',
+            minHeight: 'calc(100vh - 64px)'
+          }}>
+            {children}
+          </Box>
+        </Main>
+      </Box>
+    );
+  } catch (error) {
+    console.error('Erro ao renderizar ClientLayout:', error);
+    
+    // Layout de fallback em caso de erro
+    return (
+      <Box sx={{ 
+        padding: theme.spacing(3),
+        backgroundColor: '#f5f5f5',
+        minHeight: '100vh'
+      }}>
+        <Typography variant="h5" color="error" gutterBottom>
+          Erro ao carregar o layout
+        </Typography>
+        <Typography variant="body1" paragraph>
+          Ocorreu um problema ao carregar a interface do cliente. Por favor, tente novamente.
+        </Typography>
+        <Box sx={{ mt: 3 }}>
+          {children}
+        </Box>
+        <Box sx={{ mt: 4 }}>
+          <Button variant="outlined" color="primary" onClick={() => window.location.reload()}>
+            Recarregar Página
+          </Button>
+          <Button 
+            variant="outlined" 
+            color="secondary" 
+            onClick={handleLogout} 
+            sx={{ ml: 2 }}
+          >
+            Sair
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
 };
 
 export default ClientLayout;

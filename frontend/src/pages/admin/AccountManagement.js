@@ -242,10 +242,34 @@ const AccountManagement = () => {
   
   // Função para ajustar saldo (depósito ou saque)
   const handleAdjustBalance = async (accountId, operationType) => {
-    if (!selectedAccount) return;
+    // Encontrar a conta em qualquer contexto (lista principal ou detalhes)
+    let account;
+    let isInSelectedAccount = false;
     
-    const account = selectedAccount.accounts.find(acc => acc.id === accountId);
-    if (!account) return;
+    if (selectedAccount) {
+      account = selectedAccount.accounts.find(acc => acc.id === accountId);
+      if (account) isInSelectedAccount = true;
+    }
+    
+    if (!account) {
+      // Procurar na lista principal de contas
+      for (const client of accounts) {
+        const foundAccount = client.accounts.find(acc => acc.id === accountId);
+        if (foundAccount) {
+          account = foundAccount;
+          break;
+        }
+      }
+    }
+    
+    if (!account) {
+      setSnackbar({
+        open: true,
+        message: 'Conta não encontrada',
+        severity: 'error'
+      });
+      return;
+    }
     
     const amount = parseFloat(account.transactionAmount || 0);
     if (isNaN(amount) || amount <= 0) {
@@ -261,40 +285,90 @@ const AccountManagement = () => {
     
     try {
       const operation = operationType === 'deposit' ? 'deposit' : 'withdraw';
-      const response = await fetch(`${window.ENV.API_URL}/admin/accounts/${accountId}/${operation}`, {
+      
+      // Adicionando mais logs para depuração
+      console.log('window.ENV:', window.ENV);
+      console.log('window.ENV.API_URL:', window.ENV.API_URL);
+      console.log('Account:', account);
+      
+      // Verificar se é uma conta BRL para usar a rota específica
+      let apiUrl;
+      if (account && account.currency === 'BRL') {
+        apiUrl = `/api/admin/accounts/brl/${accountId}/${operation}`;
+        console.log('Usando rota específica para BRL:', apiUrl);
+      } else {
+        apiUrl = `/api/admin/accounts/${accountId}/${operation}`;
+        console.log('Usando rota padrão:', apiUrl);
+      }
+      
+      console.log('Enviando requisição para:', apiUrl);
+      console.log('Dados enviados:', { amount });
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({ amount })
       });
       
+      // Verificar o status da resposta antes de tentar processar o JSON
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Erro na resposta da API:', response.status, errorText);
+        throw new Error(response.status === 404 ? 'Recurso não encontrado' : errorText || 'Erro ao processar operação');
+      }
+      
       const data = await response.json();
+      console.log('Resposta da API:', data);
       
       if (response.ok) {
         // Atualizar o saldo na interface
-        const updatedAccounts = selectedAccount.accounts.map(acc => {
-          if (acc.id === accountId) {
-            const newBalance = operationType === 'deposit' 
-              ? acc.balance + amount 
-              : acc.balance - amount;
-            
-            return { 
-              ...acc, 
-              balance: newBalance,
-              transactionAmount: ''  // Limpar o campo após a operação
-            };
-          }
-          return acc;
-        });
-        
-        setSelectedAccount({
-          ...selectedAccount,
-          accounts: updatedAccounts
-        });
+        if (isInSelectedAccount) {
+          const updatedAccounts = selectedAccount.accounts.map(acc => {
+            if (acc.id === accountId) {
+              const newBalance = operationType === 'deposit' 
+                ? parseFloat(acc.balance) + amount 
+                : parseFloat(acc.balance) - amount;
+              
+              return { 
+                ...acc, 
+                balance: newBalance,
+                transactionAmount: ''  // Limpar o campo após a operação
+              };
+            }
+            return acc;
+          });
+          
+          setSelectedAccount({
+            ...selectedAccount,
+            accounts: updatedAccounts
+          });
+        }
         
         // Atualizar a lista de contas principal
-        fetchAccounts();
+        setAccounts(accounts.map(client => {
+          const updatedAccounts = client.accounts.map(acc => {
+            if (acc.id === accountId) {
+              const newBalance = operationType === 'deposit' 
+                ? parseFloat(acc.balance) + amount 
+                : parseFloat(acc.balance) - amount;
+              
+              return { 
+                ...acc, 
+                balance: newBalance,
+                transactionAmount: ''  // Limpar o campo após a operação
+              };
+            }
+            return acc;
+          });
+          
+          return {
+            ...client,
+            accounts: updatedAccounts
+          };
+        }));
         
         setSnackbar({
           open: true,
@@ -682,7 +756,7 @@ const AccountManagement = () => {
                 />
 
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 2 }}>
-                  Ao criar uma conta, três contas serão geradas automaticamente nas moedas USD, EUR e USDT.
+                  Ao criar uma conta, quatro contas serão geradas automaticamente nas moedas USD, EUR, USDT e BRL.
                 </Typography>
               </>
             ) : (
@@ -801,102 +875,77 @@ const AccountManagement = () => {
                       <Typography variant="subtitle2" sx={{ mt: 2 }}>Contas</Typography>
                       
                       {selectedAccount?.accounts?.map((account, index) => (
-                        <Box key={account.id} sx={{ mt: 1, p: 1, border: '1px solid #e0e0e0', borderRadius: 1 }}>
-                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Box>
-                              <Typography variant="body2" fontWeight="bold">
-                                <Chip 
-                                  label={account.currency} 
-                                  size="small" 
-                                  color={
-                                    account.currency === 'USD' ? 'primary' : 
-                                    account.currency === 'EUR' ? 'secondary' : 'success'
-                                  }
-                                  sx={{ mr: 1 }}
-                                />
-                                {account.accountNumber}
-                              </Typography>
-                              <Typography variant="body2" color="text.secondary">
-                                Saldo: {formatCurrency(account.balance, account.currency)}
-                              </Typography>
-                            </Box>
-                            
-                            <Box>
-                              <FormControl size="small" sx={{ minWidth: 120 }}>
-                                <InputLabel id={`status-label-${index}`}>Status</InputLabel>
-                                <Select
-                                  labelId={`status-label-${index}`}
-                                  value={account.status || 'active'}
-                                  onChange={(e) => handleAccountStatusChange(account.id, e.target.value)}
-                                  label="Status"
-                                  size="small"
-                                >
-                                  <MenuItem value="active">Ativo</MenuItem>
-                                  <MenuItem value="blocked">Bloqueado</MenuItem>
-                                  <MenuItem value="frozen">Congelado</MenuItem>
-                                </Select>
-                              </FormControl>
-                            </Box>
-                          </Box>
+                        <Box 
+                          key={account.id} 
+                          sx={{ 
+                            display: 'flex', 
+                            flexDirection: 'column',
+                            p: 1,
+                            border: '1px solid #eee',
+                            borderRadius: 1,
+                            mb: 1
+                          }}
+                        >
+                          <Typography variant="caption" color="primary">
+                            {account.currency} - {account.accountNumber}
+                          </Typography>
+                          <Typography variant="body2">
+                            {formatCurrency(account.balance, account.currency)}
+                          </Typography>
+                          <Chip
+                            size="small"
+                            label={account.status === 'active' ? 'Ativo' : 'Inativo'}
+                            color={account.status === 'active' ? 'success' : 'default'}
+                            sx={{ alignSelf: 'flex-start', mt: 0.5 }}
+                          />
                           
-                          <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
+                          {/* Campos para depósito/saque */}
+                          <Box sx={{ display: 'flex', mt: 1, gap: 1, alignItems: 'center' }}>
                             <TextField
+                              size="small"
                               label="Valor"
                               type="number"
-                              size="small"
                               value={account.transactionAmount || ''}
-                              onChange={(e) => handleAccountFieldChange(account.id, 'transactionAmount', e.target.value)}
-                              InputProps={{
-                                startAdornment: <InputAdornment position="start">{account.currency}</InputAdornment>,
+                              onChange={(e) => {
+                                const updatedAccounts = selectedAccount.accounts.map(acc => {
+                                  if (acc.id === account.id) {
+                                    return { ...acc, transactionAmount: e.target.value };
+                                  }
+                                  return acc;
+                                });
+                                
+                                const updatedClient = {
+                                  ...selectedAccount,
+                                  accounts: updatedAccounts
+                                };
+                                
+                                setSelectedAccount(updatedClient);
                               }}
-                              sx={{ width: '40%' }}
+                              InputProps={{
+                                startAdornment: account.currency === 'BRL' ? 
+                                  <InputAdornment position="start">R$</InputAdornment> :
+                                  <InputAdornment position="start">{account.currency}</InputAdornment>,
+                              }}
+                              sx={{ width: '120px' }}
                             />
-                            
-                            <Button 
-                              variant="outlined" 
-                              color="success" 
+                            <Button
                               size="small"
+                              variant="outlined"
+                              color="success"
                               onClick={() => handleAdjustBalance(account.id, 'deposit')}
-                              sx={{ flexGrow: 1, fontSize: '0.75rem' }}
+                              disabled={submitting}
                             >
                               Depositar
                             </Button>
-                            
-                            <Button 
-                              variant="outlined" 
-                              color="error" 
+                            <Button
                               size="small"
+                              variant="outlined"
+                              color="error"
                               onClick={() => handleAdjustBalance(account.id, 'withdraw')}
-                              sx={{ flexGrow: 1, fontSize: '0.75rem' }}
+                              disabled={submitting}
                             >
                               Sacar
                             </Button>
-                          </Box>
-                          
-                          <Box sx={{ mt: 2 }}>
-                            <TextField
-                              label="Limite Diário"
-                              type="number"
-                              size="small"
-                              value={account.dailyLimit || ''}
-                              onChange={(e) => handleAccountFieldChange(account.id, 'dailyLimit', e.target.value)}
-                              InputProps={{
-                                startAdornment: <InputAdornment position="start">{account.currency}</InputAdornment>,
-                              }}
-                              sx={{ width: '48%', mr: 1 }}
-                            />
-                            
-                            <TextField
-                              label="Limite Mensal"
-                              type="number"
-                              size="small"
-                              value={account.monthlyLimit || ''}
-                              onChange={(e) => handleAccountFieldChange(account.id, 'monthlyLimit', e.target.value)}
-                              InputProps={{
-                                startAdornment: <InputAdornment position="start">{account.currency}</InputAdornment>,
-                              }}
-                              sx={{ width: '48%' }}
-                            />
                           </Box>
                         </Box>
                       ))}
@@ -1079,7 +1128,7 @@ const AccountManagement = () => {
                 </TableRow>
               ) : (
                 accounts.map((client) => (
-                  <TableRow key={client.id} hover>
+                  <TableRow key={client.id}>
                     <TableCell>
                       <Typography variant="subtitle2">{client.userName}</Typography>
                       <Typography variant="body2" color="text.secondary">{client.userEmail}</Typography>
@@ -1087,29 +1136,88 @@ const AccountManagement = () => {
                     <TableCell>
                       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                         {client.accounts.map(account => (
-                          <Box key={account.id} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <Chip
-                              label={account.currency}
-                              color={
-                                account.currency === 'USD' ? 'primary' : 
-                                account.currency === 'EUR' ? 'secondary' : 
-                                account.currency === 'USDT' ? 'success' : 'default'
-                              }
-                              size="small"
-                              sx={{ minWidth: 60 }}
-                            />
-                            <Typography variant="body2">{account.accountNumber}</Typography>
-                            <Typography variant="body2" color="text.secondary">
+                          <Box 
+                            key={account.id} 
+                            sx={{ 
+                              display: 'flex', 
+                              flexDirection: 'column',
+                              p: 1,
+                              border: '1px solid #eee',
+                              borderRadius: 1,
+                              mb: 1
+                            }}
+                          >
+                            <Typography variant="caption" color="primary">
+                              {account.currency} - {account.accountNumber}
+                            </Typography>
+                            <Typography variant="body2">
                               {formatCurrency(account.balance, account.currency)}
                             </Typography>
+                            <Chip
+                              size="small"
+                              label={account.status === 'active' ? 'Ativo' : 'Inativo'}
+                              color={account.status === 'active' ? 'success' : 'default'}
+                              sx={{ alignSelf: 'flex-start', mt: 0.5 }}
+                            />
+                            
+                            {/* Campos para depósito/saque */}
+                            <Box sx={{ display: 'flex', mt: 1, gap: 1, alignItems: 'center' }}>
+                              <TextField
+                                size="small"
+                                label="Valor"
+                                type="number"
+                                value={account.transactionAmount || ''}
+                                onChange={(e) => {
+                                  const updatedAccounts = client.accounts.map(acc => {
+                                    if (acc.id === account.id) {
+                                      return { ...acc, transactionAmount: e.target.value };
+                                    }
+                                    return acc;
+                                  });
+                                  
+                                  const updatedClient = {
+                                    ...client,
+                                    accounts: updatedAccounts
+                                  };
+                                  
+                                  setAccounts(accounts.map(c => 
+                                    c.id === client.id ? updatedClient : c
+                                  ));
+                                }}
+                                InputProps={{
+                                  startAdornment: account.currency === 'BRL' ? 
+                                    <InputAdornment position="start">R$</InputAdornment> :
+                                    <InputAdornment position="start">{account.currency}</InputAdornment>,
+                                }}
+                                sx={{ width: '120px' }}
+                              />
+                              <Button
+                                size="small"
+                                variant="outlined"
+                                color="success"
+                                onClick={() => handleAdjustBalance(account.id, 'deposit')}
+                                disabled={submitting}
+                              >
+                                Depositar
+                              </Button>
+                              <Button
+                                size="small"
+                                variant="outlined"
+                                color="error"
+                                onClick={() => handleAdjustBalance(account.id, 'withdraw')}
+                                disabled={submitting}
+                              >
+                                Sacar
+                              </Button>
+                            </Box>
                           </Box>
                         ))}
                       </Box>
                     </TableCell>
                     <TableCell>
                       <Chip
-                        label={client.accounts[0]?.status === 'active' ? 'Ativo' : 'Inativo'}
-                        color={client.accounts[0]?.status === 'active' ? 'success' : 'default'}
+                        label={client.status === 'active' ? 'Ativo' : 'Inativo'}
+                        color={client.status === 'active' ? 'success' : 'default'}
                         size="small"
                       />
                     </TableCell>

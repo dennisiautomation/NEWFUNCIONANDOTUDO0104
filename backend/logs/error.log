@@ -50,3 +50,29 @@
 {"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-01T11:34:09.245Z"}
 {"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-01 11:37:56"}
 {"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-01T11:37:56.285Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-01 14:16:23"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-01T14:16:23.596Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-01 14:25:50"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-01T14:25:50.069Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-01 14:32:18"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-01T14:32:18.536Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-01 14:53:47"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-01T14:53:47.916Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-02 12:49:08"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-02T12:49:08.452Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-03 05:18:56"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-03T05:18:56.187Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-03 21:17:25"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-03T21:17:25.141Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-03 22:10:58"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-03T22:10:58.165Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-04 05:13:24"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-04T05:13:24.909Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-04 19:41:40"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-04T19:41:40.175Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-09 19:22:50"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-09T19:22:50.626Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-11 15:51:51"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-11T15:51:51.961Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-11 18:55:48"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-11T18:55:48.951Z"}

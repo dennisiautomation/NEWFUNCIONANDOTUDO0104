@@ -561,3 +561,279 @@
 {"level":"info","message":"Created accounts for user: 44 via public register","service":"newcashbank-api","timestamp":"2025-04-01T11:37:56.272Z"}
 {"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-01 11:37:56"}
 {"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-01T11:37:56.285Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-01T11:52:05.128Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-01T11:52:05.131Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-01T11:52:05.240Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-01T11:54:01.109Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-01T11:54:01.111Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-01T11:54:01.274Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/alfa%40newcasbank.com.br","service":"newcashbank-api","timestamp":"2025-04-01T13:36:02.232Z"}
+{"level":"info","message":"Created accounts for user: 46 via public register","service":"newcashbank-api","timestamp":"2025-04-01T14:16:23.567Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-01 14:16:23"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-01T14:16:23.596Z"}
+{"level":"info","message":"Created accounts for user: 47 via public register","service":"newcashbank-api","timestamp":"2025-04-01T14:25:50.062Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-01 14:25:50"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-01T14:25:50.069Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/brunocosta%40ceresbrasil.com","service":"newcashbank-api","timestamp":"2025-04-01T14:26:50.675Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/brunocosta%40ceresbrasil.com","service":"newcashbank-api","timestamp":"2025-04-01T14:27:16.147Z"}
+{"level":"info","message":"Created accounts for user: 48 via public register","service":"newcashbank-api","timestamp":"2025-04-01T14:32:18.532Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-01 14:32:18"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-01T14:32:18.536Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/bunocosta%40ceresbrasil.com","service":"newcashbank-api","timestamp":"2025-04-01T14:51:19.437Z"}
+{"level":"info","message":"Created accounts for user: 49 via public register","service":"newcashbank-api","timestamp":"2025-04-01T14:53:47.912Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-01 14:53:47"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-01T14:53:47.916Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/juridico%40ceresbasil.com","service":"newcashbank-api","timestamp":"2025-04-01T14:54:15.633Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/.env","service":"newcashbank-api","timestamp":"2025-04-01T21:28:42.313Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/credentials","service":"newcashbank-api","timestamp":"2025-04-01T21:28:44.009Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/config.json","service":"newcashbank-api","timestamp":"2025-04-01T21:28:54.694Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/v1/.env","service":"newcashbank-api","timestamp":"2025-04-01T21:28:55.104Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api-docs","service":"newcashbank-api","timestamp":"2025-04-01T21:29:05.240Z"}
+{"level":"warn","message":"Rota não encontrada: GET //api/.env","service":"newcashbank-api","timestamp":"2025-04-02T04:33:37.187Z"}
+{"level":"info","message":"Created accounts for user: 50 via public register","service":"newcashbank-api","timestamp":"2025-04-02T12:49:08.414Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-02 12:49:08"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-02T12:49:08.452Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/angelmichelino%40gmail.com","service":"newcashbank-api","timestamp":"2025-04-03T05:17:39.707Z"}
+{"level":"info","message":"Created accounts for user: 51 via public register","service":"newcashbank-api","timestamp":"2025-04-03T05:18:56.105Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-03 05:18:56"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-03T05:18:56.187Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/angelmichelino%40gmail.com","service":"newcashbank-api","timestamp":"2025-04-03T05:19:14.492Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php","service":"newcashbank-api","timestamp":"2025-04-03T06:41:53.638Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/helio%40newcashbank.com.br","service":"newcashbank-api","timestamp":"2025-04-03T12:03:28.937Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/ft-accounts/usd/transactions-real","service":"newcashbank-api","timestamp":"2025-04-03T20:17:30.192Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/ft-accounts/eur/transactions-real","service":"newcashbank-api","timestamp":"2025-04-03T20:17:30.205Z"}
+{"level":"info","message":"Created accounts for user: 52 via public register","service":"newcashbank-api","timestamp":"2025-04-03T21:17:25.127Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-03 21:17:25"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-03T21:17:25.141Z"}
+{"level":"info","message":"Created accounts for user: 53 via public register","service":"newcashbank-api","timestamp":"2025-04-03T22:10:58.157Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-03 22:10:58"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-03T22:10:58.165Z"}
+{"level":"info","message":"Created accounts for user: 54 via public register","service":"newcashbank-api","timestamp":"2025-04-04T05:13:24.844Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-04 05:13:24"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-04T05:13:24.909Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/bin/440393","service":"newcashbank-api","timestamp":"2025-04-04T16:31:56.137Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-04T19:30:20.826Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-04T19:30:20.828Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-04T19:30:21.025Z"}
+{"level":"info","message":"Created accounts for user: 55 via public register","service":"newcashbank-api","timestamp":"2025-04-04T19:41:40.165Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-04 19:41:40"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-04T19:41:40.175Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/user/binLookup","service":"newcashbank-api","timestamp":"2025-04-05T04:51:06.725Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-06T00:16:47.025Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-06T00:16:47.027Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-06T00:16:47.224Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/bin/440393","service":"newcashbank-api","timestamp":"2025-04-06T14:19:44.765Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/user/binLookup","service":"newcashbank-api","timestamp":"2025-04-06T14:19:45.839Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/bin/440393","service":"newcashbank-api","timestamp":"2025-04-06T17:24:51.587Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/user/binLookup","service":"newcashbank-api","timestamp":"2025-04-06T17:24:52.662Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php","service":"newcashbank-api","timestamp":"2025-04-07T10:24:58.380Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/ft-accounts/usd/transactions-real","service":"newcashbank-api","timestamp":"2025-04-07T21:55:45.731Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/ft-accounts/eur/transactions-real","service":"newcashbank-api","timestamp":"2025-04-07T21:55:45.755Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/alfa%40newcasbank.com.br","service":"newcashbank-api","timestamp":"2025-04-08T00:19:04.453Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/alfa%40newcasbank.com.br","service":"newcashbank-api","timestamp":"2025-04-08T00:19:17.441Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/alfa%40newcashbank.com.br","service":"newcashbank-api","timestamp":"2025-04-08T00:19:35.675Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/alfa%40newcasbank.com.br","service":"newcashbank-api","timestamp":"2025-04-08T00:21:01.387Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/helio%40newcashbank.com.br","service":"newcashbank-api","timestamp":"2025-04-08T12:37:07.136Z"}
+{"level":"warn","message":"Rota não encontrada: GET /apiollama","service":"newcashbank-api","timestamp":"2025-04-08T14:19:47.158Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/internal/accounts/119/deposit","service":"newcashbank-api","timestamp":"2025-04-08T16:35:33.452Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/alfa%40newcasbank.com.br","service":"newcashbank-api","timestamp":"2025-04-08T16:36:21.811Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/alpha%40newcashbank.com.br","service":"newcashbank-api","timestamp":"2025-04-08T16:42:34.085Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/Alpha%40newcashbank.com.br","service":"newcashbank-api","timestamp":"2025-04-08T16:43:02.178Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/alfa%40newcashbank.com.br","service":"newcashbank-api","timestamp":"2025-04-08T16:44:28.261Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/alfa%40newcashbank.com.br","service":"newcashbank-api","timestamp":"2025-04-08T16:44:40.350Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/aborgesmmkt%40gmail.com","service":"newcashbank-api","timestamp":"2025-04-09T14:22:14.472Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/aborgesmkt%40gmail.com","service":"newcashbank-api","timestamp":"2025-04-09T14:22:47.853Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/aborgesmkt%40gmail.com","service":"newcashbank-api","timestamp":"2025-04-09T14:23:26.579Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php","service":"newcashbank-api","timestamp":"2025-04-09T16:11:50.070Z"}
+{"level":"info","message":"Created accounts for user: 58 via public register","service":"newcashbank-api","timestamp":"2025-04-09T19:22:50.492Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-09 19:22:50"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-09T19:22:50.626Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/almed%40newcashbank.com.br","service":"newcashbank-api","timestamp":"2025-04-10T23:34:07.023Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/dcanteli%40icloud.com","service":"newcashbank-api","timestamp":"2025-04-10T23:34:14.650Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T00:29:49.010Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T00:29:49.012Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T00:29:49.212Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T00:30:42.311Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T00:33:26.486Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T00:34:13.328Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T00:34:13.330Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T00:34:13.415Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T00:34:24.767Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T00:34:43.605Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T00:35:23.469Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T00:36:09.315Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T00:36:09.317Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T00:36:09.403Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T00:36:11.487Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts","service":"newcashbank-api","timestamp":"2025-04-11T00:37:05.628Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T00:37:40.739Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T00:37:53.812Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T00:37:53.814Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T00:37:53.969Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T00:38:01.614Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/144/deposit","service":"newcashbank-api","timestamp":"2025-04-11T00:38:18.451Z"}
+{"level":"warn","message":"Rota não encontrada: PUT /api/admin/users/56","service":"newcashbank-api","timestamp":"2025-04-11T00:38:22.618Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T00:39:32.402Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T00:39:32.404Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T00:39:32.479Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T00:40:00.725Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/144/deposit","service":"newcashbank-api","timestamp":"2025-04-11T00:40:10.712Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/120/deposit","service":"newcashbank-api","timestamp":"2025-04-11T00:40:22.398Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/almed%40newcashbank.com.br","service":"newcashbank-api","timestamp":"2025-04-11T00:41:01.512Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/shigemi.matsumoto%40newcashbank.com.br","service":"newcashbank-api","timestamp":"2025-04-11T00:41:06.467Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T00:41:20.900Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T00:42:24.150Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T00:42:24.152Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T00:42:24.237Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T00:46:42.642Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T00:46:42.644Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T00:46:42.732Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:01:46.321Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:01:50.890Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:02:01.220Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:02:06.567Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:02:11.831Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T01:03:25.094Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T01:03:25.096Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T01:03:25.178Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:03:49.267Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:04:01.367Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:04:10.025Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:04:18.769Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:06:12.883Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:06:24.428Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T01:07:17.036Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T01:07:17.039Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T01:07:17.125Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:07:44.636Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:07:56.205Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:08:05.669Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:08:09.180Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:08:09.675Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:08:09.860Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:08:10.039Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:08:10.206Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:08:10.394Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T01:09:17.079Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T01:09:17.080Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T01:09:17.165Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T01:09:31.620Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T01:09:31.621Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T01:09:31.730Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:10:13.231Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:10:21.067Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:10:26.947Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T01:10:49.936Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T01:10:49.938Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T01:10:50.044Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:11:04.614Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:11:16.232Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:12:45.646Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/144/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:12:54.508Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/144/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:12:58.164Z"}
+{"level":"warn","message":"Rota não encontrada: PUT /api/admin/users/56","service":"newcashbank-api","timestamp":"2025-04-11T01:12:58.868Z"}
+{"level":"warn","message":"Rota não encontrada: PUT /api/admin/users/56","service":"newcashbank-api","timestamp":"2025-04-11T01:12:59.080Z"}
+{"level":"warn","message":"Rota não encontrada: PUT /api/admin/users/56","service":"newcashbank-api","timestamp":"2025-04-11T01:12:59.322Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T01:14:48.895Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T01:14:48.897Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T01:14:48.977Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:15:59.328Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:16:07.541Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/110/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:16:11.663Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/admin/accounts/144","service":"newcashbank-api","timestamp":"2025-04-11T01:16:44.941Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:16:54.274Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T01:17:39.396Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T01:17:39.398Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T01:17:39.484Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:18:07.848Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:18:16.672Z"}
+{"level":"warn","message":"Rota não encontrada: PUT /api/admin/users/53","service":"newcashbank-api","timestamp":"2025-04-11T01:18:18.298Z"}
+{"level":"warn","message":"Rota não encontrada: PUT /api/admin/users/53","service":"newcashbank-api","timestamp":"2025-04-11T01:18:18.729Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T01:18:23.444Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T01:18:34.990Z"}
+{"level":"warn","message":"Rota não encontrada: PUT /api/admin/users/53","service":"newcashbank-api","timestamp":"2025-04-11T01:18:36.765Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/v1/pods","service":"newcashbank-api","timestamp":"2025-04-11T06:30:47.508Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/sonicos/tfa","service":"newcashbank-api","timestamp":"2025-04-11T06:31:59.219Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/sonicos/auth","service":"newcashbank-api","timestamp":"2025-04-11T06:31:59.252Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T09:47:06.884Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T09:47:25.063Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T09:47:35.660Z"}
+{"level":"warn","message":"Rota não encontrada: POST /api/admin/accounts/135/deposit","service":"newcashbank-api","timestamp":"2025-04-11T09:47:35.716Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/ft-accounts/eur/transactions-real","service":"newcashbank-api","timestamp":"2025-04-11T09:48:18.409Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/ft-accounts/usd/transactions-real","service":"newcashbank-api","timestamp":"2025-04-11T09:48:18.410Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T09:54:06.908Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T09:54:06.910Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T09:54:07.053Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T09:56:16.330Z"}
+{"level":"info","message":"Processando depósito DIRETO na conta:","service":"newcashbank-api","timestamp":"2025-04-11T09:56:27.158Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T10:13:54.918Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T10:13:54.919Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T10:13:54.998Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:15:18.694Z"}
+{"level":"info","message":"Processando depósito DIRETO na conta:","service":"newcashbank-api","timestamp":"2025-04-11T10:15:33.288Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T10:16:52.021Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T10:16:52.023Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T10:16:52.102Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:17:22.484Z"}
+{"level":"info","message":"Processando depósito DIRETO na conta:","service":"newcashbank-api","timestamp":"2025-04-11T10:17:35.210Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:17:40.472Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:17:42.836Z"}
+{"level":"info","message":"Processando depósito DIRETO na conta:","service":"newcashbank-api","timestamp":"2025-04-11T10:17:51.041Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T10:19:05.407Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T10:19:05.410Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T10:19:05.514Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:19:33.400Z"}
+{"level":"info","message":"Processando depósito DIRETO na conta:","service":"newcashbank-api","timestamp":"2025-04-11T10:19:41.816Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T10:20:36.981Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T10:20:36.983Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T10:20:37.079Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:21:48.734Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:21:57.980Z"}
+{"level":"info","message":"Processando saque DIRETO na conta:","service":"newcashbank-api","timestamp":"2025-04-11T10:22:14.815Z"}
+{"level":"info","message":"Processando depósito DIRETO na conta:","service":"newcashbank-api","timestamp":"2025-04-11T10:22:18.192Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T10:23:27.317Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T10:23:27.319Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T10:23:27.405Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:40:10.319Z"}
+{"level":"info","message":"Processando depósito DIRETO na conta:","service":"newcashbank-api","timestamp":"2025-04-11T10:40:25.700Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T10:41:20.899Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T10:41:20.900Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T10:41:20.977Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:41:59.430Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:42:03.143Z"}
+{"level":"info","message":"Processando depósito DIRETO na conta:","service":"newcashbank-api","timestamp":"2025-04-11T10:42:13.648Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:42:13.727Z"}
+{"level":"info","message":"Processando saque DIRETO na conta:","service":"newcashbank-api","timestamp":"2025-04-11T10:42:30.459Z"}
+{"level":"info","message":"Servidor rodando em http://global.newcashbank.com.br:3001 - Ambiente: production","service":"newcashbank-api","timestamp":"2025-04-11T10:43:16.878Z"}
+{"level":"info","message":"Sistema PostgreSQL ativo","service":"newcashbank-api","timestamp":"2025-04-11T10:43:16.881Z"}
+{"level":"info","message":"Conexão com banco de dados PostgreSQL inicializada com sucesso","service":"newcashbank-api","timestamp":"2025-04-11T10:43:16.961Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T10:45:51.666Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T11:08:42.480Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T11:14:01.452Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-11T13:06:29.600Z"}
+{"level":"info","message":"Created accounts for user: 59 via public register","service":"newcashbank-api","timestamp":"2025-04-11T15:51:51.890Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-11 15:51:51"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-11T15:51:51.961Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/agroelos%40agroelos.com.br","service":"newcashbank-api","timestamp":"2025-04-11T18:33:46.185Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/agroelos%40agroelos.com.br","service":"newcashbank-api","timestamp":"2025-04-11T18:33:49.135Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/juridico%40seresbrasil.com","service":"newcashbank-api","timestamp":"2025-04-11T18:39:53.563Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/juridico%40seresbrasil.com","service":"newcashbank-api","timestamp":"2025-04-11T18:41:33.495Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/juridico%40brasil.com","service":"newcashbank-api","timestamp":"2025-04-11T18:43:14.629Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/juridico%40seresbrasil.com","service":"newcashbank-api","timestamp":"2025-04-11T18:44:42.119Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/auth/users/by-email/juridico%40seresbrasil.com","service":"newcashbank-api","timestamp":"2025-04-11T18:45:58.856Z"}
+{"level":"info","message":"Created accounts for user: 60 via public register","service":"newcashbank-api","timestamp":"2025-04-11T18:55:48.913Z"}
+{"level":"error","message":"Error sending email: connect ECONNREFUSED 127.0.0.1:587","service":"newcash-bank-api","timestamp":"2025-04-11 18:55:48"}
+{"level":"error","message":"Failed to send welcome email: connect ECONNREFUSED 127.0.0.1:587","service":"newcashbank-api","timestamp":"2025-04-11T18:55:48.951Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-12T01:34:44.601Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/ft-accounts/usd/transactions-real","service":"newcashbank-api","timestamp":"2025-04-12T01:36:21.308Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/ft-accounts/eur/transactions-real","service":"newcashbank-api","timestamp":"2025-04-12T01:36:21.310Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-12T01:36:24.191Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/bin/440393","service":"newcashbank-api","timestamp":"2025-04-12T09:16:21.531Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/bin/440393","service":"newcashbank-api","timestamp":"2025-04-12T10:53:04.067Z"}
+{"level":"warn","message":"Rota não encontrada: GET /api/user/binLookup","service":"newcashbank-api","timestamp":"2025-04-12T10:53:05.061Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-12T12:59:46.001Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-12T13:00:10.326Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-12T13:47:38.092Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-12T13:54:30.002Z"}
+{"level":"info","message":"Processando depósito DIRETO na conta:","service":"newcashbank-api","timestamp":"2025-04-12T13:54:38.382Z"}
+{"level":"info","message":"Utilizando rota específica para exibição de contas na interface administrativa","service":"newcashbank-api","timestamp":"2025-04-12T13:54:38.487Z"}

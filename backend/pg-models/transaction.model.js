@@ -19,7 +19,7 @@ const Transaction = sequelize.define('Transaction', {
     }
   },
   currency: {
-    type: DataTypes.ENUM('USD', 'EUR', 'USDT'),
+    type: DataTypes.ENUM('USD', 'EUR', 'USDT', 'BRL'),
     allowNull: false
   },
   sourceAccountId: {

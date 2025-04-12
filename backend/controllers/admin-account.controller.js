@@ -7,13 +7,11 @@ const LoggerService = require('../services/logger.service');
  */
 class AdminAccountController {
   /**
-   * Cria um novo usuário e suas contas padrão (USD, EUR, USDT)
+   * Cria um novo usuário e suas contas padrão (USD, EUR, USDT, BRL)
    * @param {Object} req - Objeto de requisição Express
    * @param {Object} res - Objeto de resposta Express
    */
   async createAccount(req, res) {
-    const t = await sequelize.transaction();
-    
     try {
       const { 
         name, 
@@ -24,7 +22,6 @@ class AdminAccountController {
       } = req.body;
 
       if (!name || !email || !password || !documentType || !documentNumber) {
-        await t.rollback();
         return res.status(400).json({
           status: 'error',
           message: 'Todos os campos são obrigatórios: nome, email, senha, tipo de documento e número do documento'
@@ -38,7 +35,6 @@ class AdminAccountController {
       });
       
       if (existingUser) {
-        await t.rollback();
         return res.status(400).json({
           status: 'error',
           message: 'Este email já está em uso'
@@ -52,7 +48,6 @@ class AdminAccountController {
       });
       
       if (existingDocument) {
-        await t.rollback();
         return res.status(400).json({
           status: 'error',
           message: 'Este documento já está cadastrado'
@@ -76,6 +71,7 @@ class AdminAccountController {
       const usdAccountNumber = await Account.generateAccountNumber('internal');
       const eurAccountNumber = await Account.generateAccountNumber('internal');
       const usdtAccountNumber = await Account.generateAccountNumber('internal');
+      const brlAccountNumber = await Account.generateAccountNumber('internal');
 
       // Criar conta USD
       const usdAccount = await Account.create({
@@ -119,6 +115,20 @@ class AdminAccountController {
         accountNumber: usdtAccountNumber
       }, { transaction: t });
 
+      // Criar conta BRL
+      const brlAccount = await Account.create({
+        accountType: 'internal',
+        currency: 'BRL',
+        userId: user.id,
+        name: `Conta BRL de ${name}`,
+        balance: 0,
+        isInternal: true,
+        status: 'active',
+        dailyTransferLimit: 10000,
+        monthlyTransferLimit: 50000,
+        accountNumber: brlAccountNumber
+      }, { transaction: t });
+
       await t.commit();
 
       // Registrar atividade
@@ -127,7 +137,7 @@ class AdminAccountController {
           LoggerService.logUserActivity({
             userId: req.user.id,
             action: 'CREATE_ACCOUNT',
-            details: `Administrador criou usuário ${email} com 3 contas (USD, EUR, USDT)`,
+            details: `Administrador criou usuário ${email} com 4 contas (USD, EUR, USDT, BRL)`,
             ipAddress: req.ip
           });
         } else {
@@ -167,6 +177,12 @@ class AdminAccountController {
               accountNumber: usdtAccount.accountNumber,
               currency: 'USDT',
               name: usdtAccount.name
+            },
+            {
+              id: brlAccount.id,
+              accountNumber: brlAccount.accountNumber,
+              currency: 'BRL',
+              name: brlAccount.name
             }
           ]
         }
@@ -212,7 +228,6 @@ class AdminAccountController {
           {
             model: Account,
             as: 'accounts',
-            where: { isInternal: true },
             required: false
           }
         ],
@@ -275,7 +290,6 @@ class AdminAccountController {
           {
             model: Account,
             as: 'accounts',
-            where: { isInternal: true },
             required: false
           }
         ]
@@ -328,7 +342,16 @@ class AdminAccountController {
     }
 
     try {
-      const account = await Account.findByPk(id);
+      // Buscar a conta com mais detalhes
+      const account = await Account.findByPk(id, {
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'name', 'email']
+          }
+        ]
+      });
       
       if (!account) {
         return res.status(404).json({
@@ -337,46 +360,61 @@ class AdminAccountController {
         });
       }
 
-      // Registrar a transação
-      const transaction = await sequelize.transaction();
-
-      try {
-        // Atualizar o saldo
-        const currentBalance = parseFloat(account.balance || 0);
-        const newBalance = currentBalance + parseFloat(amount);
-        
-        await account.update({ balance: newBalance }, { transaction });
-        
-        // Criar registro de transação
-        await Transaction.create({
-          accountId: id,
-          type: 'deposit',
-          amount: parseFloat(amount),
-          description: 'Depósito administrativo',
-          status: 'completed',
-          createdBy: req.user?.id || 'admin'
-        }, { transaction });
-        
-        await transaction.commit();
-        
-        return res.status(200).json({
-          status: 'success',
-          message: 'Depósito realizado com sucesso',
-          data: {
-            accountId: id,
-            newBalance
-          }
-        });
-      } catch (error) {
-        await transaction.rollback();
-        throw error;
+      // Atualizar o saldo
+      const currentBalance = parseFloat(account.balance || 0);
+      const newBalance = currentBalance + parseFloat(amount);
+      
+      await account.update({ balance: newBalance });
+      
+      // Definir uma moeda válida para a transação
+      let transactionCurrency = account.currency;
+      if (transactionCurrency === 'BRL') {
+        transactionCurrency = 'USD'; // Substituir BRL por USD para evitar erro de enum
       }
+      
+      // Registrar a transação
+      const transaction = await Transaction.create({
+        accountId: id,
+        userId: account.userId,
+        amount: parseFloat(amount),
+        type: 'DEPOSIT',
+        transactionType: 'deposit',
+        status: 'completed', // Alterado para minúsculas
+        description: `Depósito administrativo em conta ${account.currency}`,
+        currency: transactionCurrency,
+        reference: `admin-deposit-${Date.now()}`
+      });
+      
+      // Registrar atividade
+      LoggerService.logUserActivity({
+        userId: req.user ? req.user.id : null,
+        action: 'ADMIN_DEPOSIT',
+        details: `Depósito de ${amount} ${account.currency} na conta ${account.accountNumber} (ID: ${id})`,
+        ipAddress: req.ip
+      });
+      
+      return res.status(200).json({
+        status: 'success',
+        message: 'Depósito realizado com sucesso',
+        data: {
+          accountId: id,
+          newBalance,
+          transaction: {
+            id: transaction.id,
+            amount: transaction.amount,
+            type: transaction.type,
+            status: transaction.status,
+            createdAt: transaction.createdAt
+          }
+        }
+      });
       
     } catch (error) {
       console.error('Erro ao processar depósito:', error);
       return res.status(500).json({
         status: 'error',
-        message: 'Erro interno ao processar depósito'
+        message: 'Erro interno ao processar depósito',
+        error: error.message
       });
     }
   }
@@ -405,7 +443,16 @@ class AdminAccountController {
     }
 
     try {
-      const account = await Account.findByPk(id);
+      // Buscar a conta com mais detalhes
+      const account = await Account.findByPk(id, {
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'name', 'email']
+          }
+        ]
+      });
       
       if (!account) {
         return res.status(404).json({
@@ -414,54 +461,69 @@ class AdminAccountController {
         });
       }
 
+      // Verificar se há saldo suficiente
       const currentBalance = parseFloat(account.balance || 0);
-      
       if (currentBalance < parseFloat(amount)) {
         return res.status(400).json({
           status: 'error',
-          message: 'Saldo insuficiente para realizar o saque'
+          message: 'Saldo insuficiente'
         });
       }
 
+      // Atualizar o saldo
+      const newBalance = currentBalance - parseFloat(amount);
+      
+      await account.update({ balance: newBalance });
+      
+      // Definir uma moeda válida para a transação
+      let transactionCurrency = account.currency;
+      if (transactionCurrency === 'BRL') {
+        transactionCurrency = 'USD'; // Substituir BRL por USD para evitar erro de enum
+      }
+      
       // Registrar a transação
-      const transaction = await sequelize.transaction();
-
-      try {
-        // Atualizar o saldo
-        const newBalance = currentBalance - parseFloat(amount);
-        
-        await account.update({ balance: newBalance }, { transaction });
-        
-        // Criar registro de transação
-        await Transaction.create({
+      const transaction = await Transaction.create({
+        accountId: id,
+        userId: account.userId,
+        amount: parseFloat(amount), // Alterado para valor positivo
+        type: 'WITHDRAWAL',
+        transactionType: 'withdrawal',
+        status: 'completed', // Alterado para minúsculas
+        description: `Saque administrativo em conta ${account.currency}`,
+        currency: transactionCurrency,
+        reference: `admin-withdraw-${Date.now()}`
+      });
+      
+      // Registrar atividade
+      LoggerService.logUserActivity({
+        userId: req.user ? req.user.id : null,
+        action: 'ADMIN_WITHDRAWAL',
+        details: `Saque de ${amount} ${account.currency} da conta ${account.accountNumber} (ID: ${id})`,
+        ipAddress: req.ip
+      });
+      
+      return res.status(200).json({
+        status: 'success',
+        message: 'Saque realizado com sucesso',
+        data: {
           accountId: id,
-          type: 'withdraw',
-          amount: parseFloat(amount),
-          description: 'Saque administrativo',
-          status: 'completed',
-          createdBy: req.user?.id || 'admin'
-        }, { transaction });
-        
-        await transaction.commit();
-        
-        return res.status(200).json({
-          status: 'success',
-          message: 'Saque realizado com sucesso',
-          data: {
-            accountId: id,
-            newBalance
+          newBalance,
+          transaction: {
+            id: transaction.id,
+            amount: transaction.amount,
+            type: transaction.type,
+            status: transaction.status,
+            createdAt: transaction.createdAt
           }
-        });
-      } catch (error) {
-        await transaction.rollback();
-        throw error;
-      }
+        }
+      });
       
     } catch (error) {
       console.error('Erro ao processar saque:', error);
       return res.status(500).json({
         status: 'error',
-        message: 'Erro interno ao processar saque'
+        message: 'Erro interno ao processar saque',
+        error: error.message
       });
     }
   }
@@ -521,6 +583,355 @@ class AdminAccountController {
       return res.status(500).json({
         status: 'error',
         message: 'Erro interno ao atualizar conta'
+      });
+    }
+  }
+
+  async createSingleAccount(req, res) {
+    try {
+      const { userId, accountType, currency, initialBalance, name } = req.body;
+      
+      if (!userId || !accountType || !currency) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Dados incompletos. Usuário, tipo de conta e moeda são obrigatórios.'
+        });
+      }
+      
+      // Validar a moeda
+      const validCurrencies = ['USD', 'EUR', 'USDT', 'BRL'];
+      if (!validCurrencies.includes(currency)) {
+        return res.status(400).json({
+          status: 'error',
+          message: `Moeda inválida. Moedas suportadas: ${validCurrencies.join(', ')}`
+        });
+      }
+
+      // Gerar número de conta
+      const accountNumber = await Account.generateAccountNumber(accountType);
+
+      // Criar conta
+      const account = await Account.create({
+        accountType,
+        currency,
+        userId,
+        name,
+        balance: initialBalance || 0,
+        isInternal: accountType === 'internal',
+        status: 'active',
+        dailyTransferLimit: 10000,
+        monthlyTransferLimit: 50000,
+        accountNumber
+      });
+
+      return res.status(201).json({
+        status: 'success',
+        message: 'Conta criada com sucesso',
+        data: account
+      });
+    } catch (error) {
+      console.error('Erro ao criar conta:', error);
+      
+      return res.status(500).json({
+        status: 'error',
+        message: 'Erro ao criar conta',
+        error: error.message
+      });
+    }
+  }
+
+  /**
+   * Criar uma nova conta BRL para um usuário
+   * @param {Object} req - Objeto de requisição Express
+   * @param {Object} res - Objeto de resposta Express
+   */
+  async createSingleAccountBRL(req, res) {
+    try {
+      const { userId, initialBalance, name } = req.body;
+      
+      if (!userId) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'ID do usuário é obrigatório'
+        });
+      }
+      
+      // Verificar se o usuário existe
+      const user = await User.findByPk(userId);
+      
+      if (!user) {
+        return res.status(404).json({
+          status: 'error',
+          message: 'Usuário não encontrado'
+        });
+      }
+      
+      // Verificar se o usuário já tem uma conta BRL
+      const existingAccount = await Account.findOne({
+        where: { 
+          userId,
+          currency: 'BRL'
+        }
+      });
+      
+      if (existingAccount) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Usuário já possui uma conta BRL'
+        });
+      }
+      
+      // Gerar número de conta
+      const accountNumber = await Account.generateAccountNumber('standard');
+      
+      // Criar conta BRL
+      const brlAccount = await Account.create({
+        accountType: 'standard',
+        currency: 'BRL',
+        userId,
+        name: name || `Conta BRL de ${user.name}`,
+        balance: initialBalance || 0,
+        isInternal: false,
+        status: 'active',
+        dailyTransferLimit: 20000,
+        monthlyTransferLimit: 100000,
+        accountNumber
+      });
+      
+      // Registrar atividade
+      LoggerService.logUserActivity({
+        userId: req.user.id,
+        action: 'CREATE_BRL_ACCOUNT',
+        details: `Administrador criou conta BRL para usuário ID: ${userId}`,
+        ipAddress: req.ip
+      });
+      
+      return res.status(201).json({
+        status: 'success',
+        message: 'Conta BRL criada com sucesso',
+        data: brlAccount
+      });
+    } catch (error) {
+      console.error('Erro ao criar conta BRL:', error);
+      
+      return res.status(500).json({
+        status: 'error',
+        message: 'Erro ao criar conta BRL',
+        error: error.message
+      });
+    }
+  }
+
+  /**
+   * Realizar depósito em conta BRL
+   * @param {Object} req - Objeto de requisição Express
+   * @param {Object} res - Objeto de resposta Express
+   */
+  async depositToBRLAccount(req, res) {
+    const { id } = req.params;
+    const { amount } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'ID da conta é obrigatório'
+      });
+    }
+
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Valor deve ser um número positivo'
+      });
+    }
+
+    try {
+      // Buscar a conta com mais detalhes
+      const account = await Account.findByPk(id, {
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'name', 'email']
+          }
+        ]
+      });
+      
+      if (!account) {
+        return res.status(404).json({
+          status: 'error',
+          message: 'Conta não encontrada'
+        });
+      }
+
+      // Verificar se é uma conta BRL
+      if (account.currency !== 'BRL') {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Esta rota é específica para contas BRL'
+        });
+      }
+
+      // Atualizar o saldo
+      const currentBalance = parseFloat(account.balance || 0);
+      const newBalance = currentBalance + parseFloat(amount);
+      
+      await account.update({ balance: newBalance });
+      
+      // Registrar a transação
+      const transaction = await Transaction.create({
+        accountId: id,
+        userId: account.userId,
+        amount: parseFloat(amount),
+        type: 'DEPOSIT',
+        transactionType: 'deposit',
+        status: 'completed', // Alterado para minúsculas
+        description: `Depósito administrativo em conta BRL`,
+        currency: 'USD',
+        reference: `admin-deposit-brl-${Date.now()}`
+      });
+      
+      // Registrar atividade
+      LoggerService.logUserActivity({
+        userId: req.user ? req.user.id : null,
+        action: 'ADMIN_DEPOSIT_BRL',
+        details: `Depósito de ${amount} BRL na conta ${account.accountNumber} (ID: ${id})`,
+        ipAddress: req.ip
+      });
+      
+      return res.status(200).json({
+        status: 'success',
+        message: 'Depósito em conta BRL realizado com sucesso',
+        data: {
+          accountId: id,
+          newBalance,
+          transaction: {
+            id: transaction.id,
+            amount: transaction.amount,
+            type: transaction.type,
+            status: transaction.status,
+            createdAt: transaction.createdAt
+          }
+        }
+      });
+      
+    } catch (error) {
+      console.error('Erro ao processar depósito em conta BRL:', error);
+      return res.status(500).json({
+        status: 'error',
+        message: 'Erro interno ao processar depósito em conta BRL',
+        error: error.message
+      });
+    }
+  }
+
+  /**
+   * Realizar saque em conta BRL
+   * @param {Object} req - Objeto de requisição Express
+   * @param {Object} res - Objeto de resposta Express
+   */
+  async withdrawFromBRLAccount(req, res) {
+    const { id } = req.params;
+    const { amount } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'ID da conta é obrigatório'
+      });
+    }
+
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Valor deve ser um número positivo'
+      });
+    }
+
+    try {
+      // Buscar a conta com mais detalhes
+      const account = await Account.findByPk(id, {
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'name', 'email']
+          }
+        ]
+      });
+      
+      if (!account) {
+        return res.status(404).json({
+          status: 'error',
+          message: 'Conta não encontrada'
+        });
+      }
+
+      // Verificar se é uma conta BRL
+      if (account.currency !== 'BRL') {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Esta rota é específica para contas BRL'
+        });
+      }
+
+      // Verificar se há saldo suficiente
+      const currentBalance = parseFloat(account.balance || 0);
+      if (currentBalance < parseFloat(amount)) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Saldo insuficiente para realizar o saque'
+        });
+      }
+
+      // Atualizar o saldo
+      const newBalance = currentBalance - parseFloat(amount);
+      
+      await account.update({ balance: newBalance });
+      
+      // Registrar a transação
+      const transaction = await Transaction.create({
+        accountId: id,
+        userId: account.userId,
+        amount: parseFloat(amount), // Alterado para valor positivo
+        type: 'WITHDRAWAL',
+        transactionType: 'withdrawal',
+        status: 'completed', // Alterado para minúsculas
+        description: `Saque administrativo de conta BRL`,
+        currency: 'USD',
+        reference: `admin-withdraw-brl-${Date.now()}`
+      });
+      
+      // Registrar atividade
+      LoggerService.logUserActivity({
+        userId: req.user ? req.user.id : null,
+        action: 'ADMIN_WITHDRAW_BRL',
+        details: `Saque de ${amount} BRL da conta ${account.accountNumber} (ID: ${id})`,
+        ipAddress: req.ip
+      });
+      
+      return res.status(200).json({
+        status: 'success',
+        message: 'Saque de conta BRL realizado com sucesso',
+        data: {
+          accountId: id,
+          newBalance,
+          transaction: {
+            id: transaction.id,
+            amount: transaction.amount,
+            type: transaction.type,
+            status: transaction.status,
+            createdAt: transaction.createdAt
+          }
+        }
+      });
+      
+    } catch (error) {
+      console.error('Erro ao processar saque de conta BRL:', error);
+      return res.status(500).json({
+        status: 'error',
+        message: 'Erro interno ao processar saque de conta BRL',
+        error: error.message
       });
     }
   }

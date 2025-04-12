@@ -46,6 +46,36 @@ const AccountOverview = () => {
     reservations: []
   });
 
+  const getCurrencySymbol = (currency) => {
+    switch(currency) {
+      case 'USD':
+        return '$';
+      case 'EUR':
+        return '€';
+      case 'USDT':
+        return '₮';
+      case 'BRL':
+        return 'R$';
+      default:
+        return '';
+    }
+  };
+
+  const getCurrencyColor = (currency) => {
+    switch(currency) {
+      case 'USD':
+        return 'text-green-600';
+      case 'EUR':
+        return 'text-blue-600';
+      case 'USDT':
+        return 'text-teal-600';
+      case 'BRL':
+        return 'text-yellow-600';
+      default:
+        return 'text-gray-600';
+    }
+  };
+
   // Função para buscar saldo e transações
   const fetchAccountData = async () => {
     if (!user?.accountNumber) return;
@@ -66,6 +96,7 @@ const AccountOverview = () => {
       // 3. Buscar reservas ativas
       const usdReservations = await reservationApi.getUSDReservations();
       const eurReservations = await reservationApi.getEURReservations();
+      const brlReservations = await reservationApi.getBRLReservations();
       
       // Calcular saldos
       const incoming = incomingTransfers.reduce((total, transfer) => total + Number(transfer.amount), 0);
@@ -80,7 +111,7 @@ const AccountOverview = () => {
           total: incoming - outgoing
         },
         transactions: [...transactions],
-        reservations: [...usdReservations, ...eurReservations].filter(res => 
+        reservations: [...usdReservations, ...eurReservations, ...brlReservations].filter(res => 
           res.account === user.accountNumber
         )
       });
@@ -142,7 +173,7 @@ const AccountOverview = () => {
           Visão Geral da Conta
         </Typography>
         <Typography variant="subtitle1">
-          {accountInfo.currency} | {accountInfo.accountNumber}
+          {getCurrencySymbol(accountInfo.currency)} {accountInfo.accountNumber}
         </Typography>
       </Box>
 
@@ -208,22 +239,22 @@ const AccountOverview = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="h6">
-              {accountInfo.transactions.length} Transferências | {accountInfo.currency} {accountInfo.accountNumber}
+              {accountInfo.transactions.length} Transferências | {getCurrencySymbol(accountInfo.currency)} {accountInfo.accountNumber}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Typography>
-              Total Recebido (Crédito): {accountInfo.currency} {accountInfo.balance.incoming.toFixed(2)}
+            <Typography className={getCurrencyColor(accountInfo.currency)}>
+              Total Recebido (Crédito): {getCurrencySymbol(accountInfo.currency)} {accountInfo.balance.incoming.toFixed(2)}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Typography>
-              Total Enviado (Débito): {accountInfo.currency} {accountInfo.balance.outgoing.toFixed(2)}
+            <Typography className={getCurrencyColor(accountInfo.currency)}>
+              Total Enviado (Débito): {getCurrencySymbol(accountInfo.currency)} {accountInfo.balance.outgoing.toFixed(2)}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Typography>
-              Saldo Total: {accountInfo.currency} {accountInfo.balance.total.toFixed(2)}
+            <Typography className={getCurrencyColor(accountInfo.currency)}>
+              Saldo Total: {getCurrencySymbol(accountInfo.currency)} {accountInfo.balance.total.toFixed(2)}
             </Typography>
           </Grid>
         </Grid>
@@ -250,7 +281,7 @@ const AccountOverview = () => {
                     <TableCell>{reservation.code}</TableCell>
                     <TableCell>{reservation.currency}</TableCell>
                     <TableCell align="right">
-                      {reservation.currency} {Number(reservation.amount).toFixed(2)}
+                      {getCurrencySymbol(reservation.currency)} {Number(reservation.amount).toFixed(2)}
                     </TableCell>
                     <TableCell>{reservation.status}</TableCell>
                   </TableRow>
@@ -277,7 +308,7 @@ const AccountOverview = () => {
                 <TableCell>{transaction.direction}</TableCell>
                 <TableCell>{transaction.datetime}</TableCell>
                 <TableCell align="right">
-                  {accountInfo.currency} {Number(transaction.amount).toFixed(2)}
+                  {getCurrencySymbol(accountInfo.currency)} {Number(transaction.amount).toFixed(2)}
                 </TableCell>
                 <TableCell>{transaction.description}</TableCell>
               </TableRow>

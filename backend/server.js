@@ -36,6 +36,7 @@ const userPreferencesRoutes = require('./routes/user-preferences.routes');
 const authRoutes = require('./routes/auth.routes');
 const accountRoutes = require('./routes/account.routes');
 const transactionRoutes = require('./routes/transaction.routes');
+const currencyTransferRoutes = require('./routes/currency-transfer.routes');
 
 // Rota de saúde
 app.get('/api/health', (req, res) => {
@@ -53,6 +54,7 @@ app.use('/api/user', userPreferencesRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/accounts', accountRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/currency-transfer', currencyTransferRoutes);
 
 // Dados simulados para teste (até que os dados reais sejam migrados)
 app.get('/api/account/balance', (req, res) => {

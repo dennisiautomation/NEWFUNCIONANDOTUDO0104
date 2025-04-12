@@ -131,6 +131,57 @@ class AdminUserController {
       });
     }
   }
+
+  /**
+   * Obter detalhes de um usuário específico
+   * @param {Object} req - Objeto de requisição Express
+   * @param {Object} res - Objeto de resposta Express
+   */
+  async getUserDetails(req, res) {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'ID do usuário é obrigatório'
+      });
+    }
+
+    try {
+      // Buscar o usuário com todas as informações relevantes
+      const user = await User.findByPk(id, {
+        attributes: { exclude: ['password'] } // Excluir a senha dos resultados
+      });
+      
+      if (!user) {
+        return res.status(404).json({
+          status: 'error',
+          message: 'Usuário não encontrado'
+        });
+      }
+      
+      // Log da ação administrativa
+      LoggerService.logUserActivity({
+        userId: req.user ? req.user.id : null,
+        action: 'VIEW_USER_DETAILS',
+        details: `Visualização dos detalhes do usuário ID: ${id}`,
+        ipAddress: req.ip
+      });
+      
+      return res.status(200).json({
+        status: 'success',
+        data: user
+      });
+      
+    } catch (error) {
+      console.error('Erro ao buscar detalhes do usuário:', error);
+      return res.status(500).json({
+        status: 'error',
+        message: 'Erro interno ao buscar detalhes do usuário',
+        error: error.message
+      });
+    }
+  }
 }
 
 module.exports = new AdminUserController();

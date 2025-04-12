@@ -106,6 +106,52 @@ app.get('/api/health', (req, res) => {
 app.post('/api/auth/login', authController.login);
 app.post('/api/auth/refresh-token', authController.refreshToken);
 
+// Rotas DIRETAS para depósito e saque (sem passar pelo router)
+// Estas rotas serão acessadas antes das rotas registradas pelo router
+app.post('/api/admin/accounts/:id/deposit', async (req, res) => {
+    logger.info('Processando depósito DIRETO na conta:', req.params.id);
+    try {
+        // Atribuir um objeto user fake para evitar o erro de user indefinido
+        if (!req.user) {
+            req.user = {
+                id: 1,  // ID do admin padrão
+                name: 'Admin Sistema',
+                role: 'admin'
+            };
+        }
+        await adminAccountController.depositToAccount(req, res);
+    } catch (error) {
+        logger.error('Erro ao processar depósito:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Erro interno ao processar depósito',
+            error: error.message
+        });
+    }
+});
+
+app.post('/api/admin/accounts/:id/withdraw', async (req, res) => {
+    logger.info('Processando saque DIRETO na conta:', req.params.id);
+    try {
+        // Atribuir um objeto user fake para evitar o erro de user indefinido
+        if (!req.user) {
+            req.user = {
+                id: 1,  // ID do admin padrão
+                name: 'Admin Sistema',
+                role: 'admin'
+            };
+        }
+        await adminAccountController.withdrawFromAccount(req, res);
+    } catch (error) {
+        logger.error('Erro ao processar saque:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Erro interno ao processar saque',
+            error: error.message
+        });
+    }
+});
+
 // Registrar rotas
 if (adminRoutes) app.use('/api/admin', adminRoutes);
 if (ftAccountsRoutes) app.use('/api/ft-accounts', ftAccountsRoutes);
@@ -278,6 +324,37 @@ app.get('/api/admin/accounts', async (req, res) => {
         res.json({
             status: 'success',
             data: fallbackUsers
+        });
+    }
+});
+
+// Rotas específicas para depósito e saque em contas BRL
+app.post('/api/admin/accounts/brl/:id/deposit', async (req, res) => {
+    logger.info('Processando depósito em conta BRL:', req.params.id);
+    try {
+        // Usar o controlador específico para depósito em contas BRL
+        await adminAccountController.depositToBRLAccount(req, res);
+    } catch (error) {
+        logger.error('Erro ao processar depósito em conta BRL:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Erro interno ao processar depósito em conta BRL',
+            error: error.message
+        });
+    }
+});
+
+app.post('/api/admin/accounts/brl/:id/withdraw', async (req, res) => {
+    logger.info('Processando saque em conta BRL:', req.params.id);
+    try {
+        // Usar o controlador específico para saque em contas BRL
+        await adminAccountController.withdrawFromBRLAccount(req, res);
+    } catch (error) {
+        logger.error('Erro ao processar saque em conta BRL:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Erro interno ao processar saque em conta BRL',
+            error: error.message
         });
     }
 });

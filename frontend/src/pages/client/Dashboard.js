@@ -171,10 +171,23 @@ const Dashboard = () => {
       if (response.data.status === 'success') {
         console.log('Contas retornadas pela API:', response.data.data);
         const accountsData = response.data.data || [];
-        setAccounts(accountsData);
         
-        if (accountsData && accountsData.length > 0) {
-          const defaultAccount = accountsData[0];
+        // Normalizar dados das contas para garantir consistência
+        const normalizedAccounts = accountsData.map(account => ({
+          id: account.id || account._id,
+          name: account.name || account.accountName || account.accountNumber || `Conta ${account.currency || 'USD'}`,
+          accountNumber: account.accountNumber || account.number || '0000',
+          balance: account.balance || 0,
+          currency: account.currency || 'USD',
+          status: account.status || 'active',
+          userId: account.userId || account.user_id
+        }));
+        
+        console.log('Contas normalizadas:', normalizedAccounts);
+        setAccounts(normalizedAccounts);
+        
+        if (normalizedAccounts && normalizedAccounts.length > 0) {
+          const defaultAccount = normalizedAccounts[0];
           setSelectedAccount(defaultAccount);
           
           // Verificar se o ID da conta existe antes de buscar transações
@@ -479,15 +492,27 @@ const Dashboard = () => {
       
       // Se a moeda for USDT ou não for válida, usar BRL como fallback
       let currency = currencyCode;
-      if (!currency || currency === 'USDT' || !validCurrencies.includes(currency)) {
+      if (!currency || !validCurrencies.includes(currency)) {
         console.log(`Substituindo código de moeda inválido: ${currency} por BRL`);
         currency = 'BRL';
       }
       
-      return parseFloat(value).toLocaleString('pt-BR', {
+      // Para USDT, usar BRL como moeda para formatação
+      if (currency === 'USDT') {
+        currency = 'BRL';
+      }
+      
+      const formattedValue = parseFloat(value).toLocaleString('pt-BR', {
         style: 'currency',
         currency: currency
       });
+      
+      // Para USDT, substituir o símbolo R$ por ₮
+      if (currencyCode === 'USDT') {
+        return formattedValue.replace('R$', '₮');
+      }
+      
+      return formattedValue;
     } catch (error) {
       console.error('Erro ao formatar moeda:', error);
       return `${parseFloat(value || 0).toFixed(2)}`;
@@ -546,8 +571,8 @@ const Dashboard = () => {
                                       account.currency === 'EUR' ? '#E3F2FD' : 
                                       account.currency === 'USDT' ? '#FFF3E0' : '#F5F5F5',
                       borderLeft: `5px solid ${account.currency === 'USD' ? '#43A047' : 
-                                            account.currency === 'EUR' ? '#1976D2' : 
-                                            account.currency === 'USDT' ? '#FF9800' : '#757575'}`
+                                             account.currency === 'EUR' ? '#1976D2' : 
+                                             account.currency === 'USDT' ? '#FF9800' : '#757575'}`
                     }}
                   >
                     <CardContent>
@@ -717,7 +742,7 @@ const Dashboard = () => {
                           Número da Conta:
                         </Typography>
                         <Typography variant="body1" gutterBottom>
-                          {selectedAccount.accountNumber}
+                          {selectedAccount && selectedAccount.accountNumber}
                         </Typography>
                         
                         <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
@@ -842,13 +867,33 @@ const Dashboard = () => {
                       onChange={handleFormChange}
                       required
                     >
-                      {accounts
-                        .filter(account => account.id !== selectedAccount?.id && account.currency === selectedAccount?.currency)
-                        .map(account => (
-                          <MenuItem key={account.id} value={account.id}>
-                            {account.name} ({account.accountNumber}) - {account.currency === 'BRL' ? 'USDT' : account.currency}
-                          </MenuItem>
-                        ))}
+                      {accounts && accounts.length > 0 ? (
+                        // Mostrar todas as contas EXCETO a conta de origem, priorizando contas com moedas diferentes
+                        accounts
+                          .filter(account => account.id !== selectedAccount?.id)
+                          .sort((a, b) => {
+                            // Ordenar para mostrar contas com moedas diferentes primeiro
+                            if (a.currency !== selectedAccount?.currency && b.currency === selectedAccount?.currency) return -1;
+                            if (a.currency === selectedAccount?.currency && b.currency !== selectedAccount?.currency) return 1;
+                            return 0;
+                          })
+                          .map(account => (
+                            <MenuItem key={account.id} value={account.id}>
+                              {account.name} ({account.accountNumber}) - {account.currency}
+                              {account.currency !== selectedAccount?.currency && (
+                                <Chip 
+                                  size="small" 
+                                  label="Conversão" 
+                                  color="primary" 
+                                  variant="outlined" 
+                                  sx={{ ml: 1, fontSize: '0.7rem' }} 
+                                />
+                              )}
+                            </MenuItem>
+                          ))
+                      ) : (
+                        <MenuItem disabled>Nenhuma conta disponível para transferência</MenuItem>
+                      )}
                     </Select>
                     {formErrors.destinationAccountId && (
                       <Typography variant="caption" color="error">

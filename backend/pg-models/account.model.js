@@ -17,8 +17,11 @@ const Account = sequelize.define('Account', {
     allowNull: false
   },
   currency: {
-    type: DataTypes.ENUM('USD', 'EUR', 'USDT'),
-    allowNull: false
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      isIn: [['USD', 'EUR', 'USDT', 'BRL']]
+    }
   },
   userId: {
     type: DataTypes.INTEGER,

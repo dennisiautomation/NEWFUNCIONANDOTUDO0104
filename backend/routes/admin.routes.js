@@ -239,36 +239,36 @@ router.get('/correspondent/usd', adminController.getCorrespondentUSD);
 router.get('/correspondent/eur', adminController.getCorrespondentEUR);
 router.get('/users', adminController.getUsers);
 
-// Rotas para criação e gestão de usuários/contas - removendo middleware temporariamente para testes
-router.get('/accounts', adminAccountController.listAccounts);
-router.get('/accounts/:userId', adminAccountController.getUserDetails);
-
-// Rotas para relatórios de transações - removendo middleware temporariamente para testes
-router.get('/transactions', adminTransactionController.getTransactions);
-router.get('/transactions/export', adminTransactionController.exportTransactions);
-router.get('/transactions/:id', adminTransactionController.getTransactionDetails);
+// Rotas para gerenciamento de usuários
+router.get('/users/:id', adminUserController.getUserDetails);
+router.put('/users/:id', adminUserController.updateUser);
+router.post('/users/:id/reset-tokens', adminUserController.resetUserTokens);
 
 // Verifica se o controlador de limites existe antes de registrar as rotas
 if (adminUserLimitsController && adminUserLimitsController.getUserLimits) {
-  // Rotas para gerenciamento de limites de usuário - removendo middleware temporariamente para testes
+  // Rotas para gerenciamento de limites de usuário
   router.get('/users/:userId/limits', adminUserLimitsController.getUserLimits);
   router.put('/users/:userId/limits', adminUserLimitsController.updateUserLimits);
 }
 
-// Rotas para gerenciamento de contas
-router.route('/accounts')
-  .get(adminAccountController.listAccounts)
-  .post(adminAccountController.createAccount);
+// Rotas para relatórios de transações
+router.get('/transactions', adminTransactionController.getTransactions);
+router.get('/transactions/export', adminTransactionController.exportTransactions);
+router.get('/transactions/:id', adminTransactionController.getTransactionDetails);
 
-// Rotas para depósito e saque
+// IMPORTANTE: Rotas específicas para contas BRL (devem vir antes das rotas genéricas)
+router.post('/accounts/brl', adminAccountController.createSingleAccountBRL);
+router.post('/accounts/brl/:id/deposit', adminAccountController.depositToBRLAccount);
+router.post('/accounts/brl/:id/withdraw', adminAccountController.withdrawFromBRLAccount);
+
+// Rotas para depósito e saque em contas normais
 router.post('/accounts/:id/deposit', adminAccountController.depositToAccount);
 router.post('/accounts/:id/withdraw', adminAccountController.withdrawFromAccount);
 
-// Rota para atualização de conta (status, limites)
+// Rotas para gerenciamento de contas
+router.get('/accounts', adminAccountController.listAccounts);
+router.post('/accounts', adminAccountController.createSingleAccount);
+router.get('/accounts/:id', adminAccountController.getAccountById);
 router.put('/accounts/:id', adminAccountController.updateAccount);
-
-// Rotas para gerenciamento de usuários
-router.put('/users/:id', adminUserController.updateUser);
-router.post('/users/:id/reset-tokens', adminUserController.resetUserTokens);
 
 module.exports = router;

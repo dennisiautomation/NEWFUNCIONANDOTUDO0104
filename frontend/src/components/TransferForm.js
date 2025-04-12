@@ -95,6 +95,17 @@ const TransferForm = () => {
     }
   };
 
+  const getCurrencyOptions = () => {
+    const options = [
+      { value: 'USD', label: 'Dólar (USD)' },
+      { value: 'EUR', label: 'Euro (EUR)' },
+      { value: 'USDT', label: 'Tether (USDT)' },
+      { value: 'BRL', label: 'Real (BRL)' }
+    ];
+    
+    return options;
+  };
+
   if (!user?.accountNumber) {
     return (
       <Paper elevation={3} sx={{ p: 3 }}>
@@ -204,8 +215,11 @@ const TransferForm = () => {
                 onChange={handleChange}
                 required
               >
-                <MenuItem value="USD">USD</MenuItem>
-                <MenuItem value="EUR">EUR</MenuItem>
+                {getCurrencyOptions().map(option => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
